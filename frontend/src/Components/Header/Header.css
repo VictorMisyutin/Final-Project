@@ -1,0 +1,41 @@
+header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 100px;
+}
+.title{
+    font-size: 25px;
+    color: black;
+    font-weight: bold;
+    text-decoration: none;
+}
+.right-side{
+    display: flex;
+    gap: 30px;
+    font-size: 18px;
+    align-items: center;
+
+    .link{
+        font-size: 18px;
+        text-decoration: none;
+        color: black;
+    }
+    .link:hover{
+        cursor: pointer;
+        text-decoration: underline;
+    }
+}
+.log-button{
+    font-size: 18px;
+    border-radius: 8px;
+    border: none;
+    background-color: #000000;
+    color: white;
+    padding: 0px 15px;
+    height: 45px;
+}
+.log-button:hover{
+    cursor: pointer;
+    background-color: #333333;
+}

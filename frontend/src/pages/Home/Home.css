@@ -1,0 +1,73 @@
+.hero{
+    background-color: rgb(165, 165, 165);
+    height: 350px;
+    display: grid;
+    grid-template-columns: 0.5fr 1fr;
+
+    .left-side{
+        display: flex;
+        align-items: center;
+        justify-self: center;
+        .title{
+            font-size: 35px;
+        }
+    }
+    
+    .right-side{
+        padding: 75px 0;
+        display: flex;
+        align-items: end;
+        justify-content: center;
+        flex-direction: column;
+
+        .description{
+            width: 70%;
+            text-align: center;
+            font-size: 20px;
+            font-weight: 500;
+            margin: 0 auto;
+        }
+        .icons{
+            margin: 0 auto;
+            display: flex;
+            gap: 25px;
+        }
+    }
+}
+
+.upcoming-tournaments-section {
+    display: flex;
+    flex-direction: column;
+    background-color: #dddddd;
+    padding: 20px;
+    border-radius: 8px;
+    width: 80%;
+    min-height: 300px;
+    margin: 75px auto;
+}
+  
+.data-header, .tournament {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+}
+
+.data-header {
+    background-color: #f4f4f4;
+    font-weight: bold;
+    margin-bottom: 10px;
+    border-radius: 5px;
+}
+
+.tournament {
+    background-color: #c5c5c5;
+}
+
+.tourney-title, .tourney-city, .tourney-state, .tourney-country, .tourney-sport, .tourney-date {
+    width: 20%;
+    text-align: center;
+}
+
+.tournament:nth-child(even) {
+    background-color: #a3a3a3;
+}

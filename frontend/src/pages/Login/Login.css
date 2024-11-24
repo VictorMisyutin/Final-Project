@@ -1,0 +1,44 @@
+.page-container {
+  padding-top: 175px;
+  display: flex;
+  align-items: center;
+  margin: 0; 
+  flex-direction: column;
+}
+  
+.website-title {
+  font-size: 50px;
+  color: #333;
+}
+.login-container{
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  gap: 35px;
+
+  input[type="text"], input[type="password"]{
+    border: none;
+    background-color: transparent;
+    text-align: center;
+    font-size: 28px;
+    font-weight: 100;
+    width: 300px;
+    cursor: pointer;
+  
+  }
+  input[type="submit"]{
+    font-size: 18px;
+    padding: 15px 20px;
+    border-radius: 8px;
+    border: none;
+    color: #F5F5F5;
+    background-color: #000000;
+    font-weight: 100;
+    margin-bottom: -10px;
+  }
+  input[type="submit"]:hover{
+    cursor: pointer;
+    transform: scaleX(1.05) scaleY(1.05);
+  }
+    
+}
