@@ -14,7 +14,7 @@ router.route('/users/:id')
     .put(userController.updateUser)
     .delete(userController.deleteUser);
     
-router.route('/users/verify').get(userController.verifyUser);
+router.route('/verify/user').get(userController.verifyUser);
 
 // Login Route
 router.route('/users/login')

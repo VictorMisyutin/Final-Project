@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';  // Import useNavigate instead of useHistory
 import './Login.css';
+import config from '../../config'
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState<string>('');
@@ -14,7 +15,7 @@ const Login: React.FC = () => {
     setError('');
   
     try {
-      const response = await fetch('http://localhost:4000/api/users/login', {
+      const response = await fetch( config.backendUrl + '/api/users/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -8,7 +8,7 @@ import ProtectedRoute from './Components/ProtectedComponent/ProtectedComponent';
 import Home from './pages/Home/Home';
 import Login from './pages/Login/Login';
 import Register from './pages/Register/Register';
-
+import Dashboard from './pages/Dashboard/Dashboard';
 
 
 function App() {
@@ -19,7 +19,7 @@ function App() {
       <Route path="/" element={<Home />}/>
       <Route path="/login" element={<Login />}/>
       <Route path="/register" element={<Register />}/>
-      <Route path="/dashboard" element={<ProtectedRoute><Register /></ProtectedRoute>}/>
+      <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>}/>
     </Routes>
     </>
   );

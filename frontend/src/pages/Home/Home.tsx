@@ -3,6 +3,8 @@ import { FaChess, FaTableTennis } from 'react-icons/fa'; // import icons from re
 import { RiBilliardsFill, RiBoxingFill } from 'react-icons/ri';
 import { IoGameController, IoTennisballSharp } from 'react-icons/io5';
 import './Home.css';
+import config from '../../config'
+
 
 interface Tournament {
   title: string;
@@ -23,7 +25,7 @@ const Home: React.FC = () => {
   useEffect(() => {
     const fetchTournaments = async () => {
       try {
-        const response = await fetch(`http://localhost:4000/api/tournaments?limit=${limit}`); 
+        const response = await fetch(config.backendUrl + `/api/tournaments?limit=${limit}`); 
         if (!response.ok) {
           throw new Error('Failed to fetch tournaments');
         }

@@ -1,0 +1,48 @@
+.page-container{
+    height: 800px;
+}
+.register-container{
+    width: 600px;
+    margin: 0 auto;
+    background-color: lightgray;
+    padding: 30px 50px;
+}
+h2{
+    font-size: 50px;
+}
+.form-group{
+    display: flex;
+    flex-direction: column;
+}
+label{
+    margin-top: 20px;
+    margin-bottom: 5px;
+    font-size: 25px;
+}
+input, select{
+    font-size: 20px;
+    padding: 5px;
+    margin: 0px;
+    cursor: pointer;
+}
+.error-message{
+    text-align: center;
+    font-size: 20px;
+    color: red;
+}
+.button-group{
+    display: flex;
+    justify-content: center;
+}
+button{
+    margin-top: 20px;
+    font-size: 20px;
+    padding: 5px 10px;
+    border-radius: 7px;
+    font-size: 25px;
+
+}
+button:hover{
+    cursor: pointer;
+    transform: scaleX(1.05) scaleY(1.05);
+}

@@ -1,13 +1,58 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import './Header.css';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import config from '../../config';
 
 const Header: React.FC = () => {
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
   const location = useLocation();
-  // const loggedIn = false;
-  // if logged in show "Dashboard" and "Logout "else hide Dashboard and show "Log In button"
-  const hideLogoutPaths = ['/', '/login', '/register'];
-  const isLoginPage = hideLogoutPaths.includes(location.pathname);
+  const navigate = useNavigate(); // Hook to navigate programmatically
+
+  // Checking if the user is authenticated whenever the location changes
+  useEffect(() => {
+    const checkAuth = async () => {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        setIsAuthenticated(false);
+        return;
+      }
+      try {
+        const response = await fetch(config.backendUrl + '/api/verify/user', {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (response.ok) {
+          setIsAuthenticated(true);
+        } else {
+          setIsAuthenticated(false);
+        }
+      } catch (error) {
+        setIsAuthenticated(false);
+      }
+    };
+
+    checkAuth();
+  }, [location]);
+
+  if (isAuthenticated === null) {
+    return (
+      <header>
+        <Link to="/" className="title">Tourney Tally</Link>
+        <div className="right-side">
+          <p>Loading...</p>
+        </div>
+      </header>
+    );
+  }
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    setIsAuthenticated(false);
+    navigate('/'); 
+  };
 
   return (
     <header>
@@ -17,12 +62,17 @@ const Header: React.FC = () => {
         <Link to="/dashboard" className="link">Dashboard</Link>
         <Link to="/" className="link">Players</Link>
         <Link to="/" className="link">Results</Link>
-        {isLoginPage ? (
+        {isAuthenticated ? (
+          <input
+            className="log-button"
+            type="submit"
+            value="Log Out"
+            onClick={handleLogout} 
+          />
+        ) : (
           <Link to="/login">
             <input className="log-button" type="submit" value="Log In" />
           </Link>
-        ) : (
-          <input className="log-button" type="submit" value="Log Out" />
         )}
       </div>
     </header>
