@@ -32,7 +32,6 @@ const Login: React.FC = () => {
   
       const data = await response.json();
       localStorage.setItem('token', data.data.token);
-      console.log("successfull login")
       navigate('/dashboard');  // Redirect to dashboard or other page
     } catch (err: any) {
       setError(err.message);  // Display error message

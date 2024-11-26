@@ -2,9 +2,9 @@
 
     .hero{
         background-color: transparent;
-        width: 100%;
+        width: 80%;
         display: grid;
-        grid-template-columns: 0.75fr 1fr;
+        grid-template-columns: 0.65fr 1fr;
         gap: 0;
         .left-side{
             margin-left: 40px;
@@ -13,9 +13,12 @@
             }
         }
         .right-side{
-            margin: 0;
-            text-align: center;
-            margin: 0 auto;
+            margin: 0px auto;
+            display: block;
+            text-align: left;
+            .player-welcome{
+                margin-bottom: 40px;
+            } 
         }
     }
     
