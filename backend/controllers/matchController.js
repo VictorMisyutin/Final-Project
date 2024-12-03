@@ -67,14 +67,12 @@ exports.getRecentMatchesByUser = (req, res) => {
                 return res.json({ message: 'No recent matches found', data: [] });
             }
 
-            // Log the matches to check the structure
             console.log('Matches:', matches);
 
             const recentMatches = matches.map(match => {
-                // Check if playerOne and playerTwo are present
                 if (!match.playerOne || !match.playerTwo) {
                     console.error('Missing player data in match:', match);
-                    return null; // Skip this match if player data is missing
+                    return null;
                 }
 
                 const isPlayerOne = match.playerOne._id.toString() === userId;
@@ -92,16 +90,16 @@ exports.getRecentMatchesByUser = (req, res) => {
                 return {
                     opponent: opponent.name,
                     opponent_rating: opponent.elo,
-                    result: result || 'N/A', // Default if result is missing
-                    rating_change: ratingChange || 0, // Default if ratingChange is missing
+                    result: result || 'N/A', 
+                    rating_change: ratingChange || 0, 
                     start_date: match.startDate
                 };
-            }).filter(Boolean); // Remove any null values from the result
+            }).filter(Boolean);
 
             res.json({ message: 'OK', data: recentMatches });
         })
         .catch(err => {
-            console.error('Error fetching matches:', err); // Log the error
+            console.error('Error fetching matches:', err);
             res.status(500).json({ message: 'Error fetching matches', data: err });
         });
 };

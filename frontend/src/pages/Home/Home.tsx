@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FaChess, FaTableTennis } from 'react-icons/fa'; // import icons from react-icons
+import { FaChess, FaTableTennis } from 'react-icons/fa';
 import { RiBilliardsFill, RiBoxingFill } from 'react-icons/ri';
 import { IoGameController, IoTennisballSharp } from 'react-icons/io5';
 import './Home.css';
@@ -20,7 +20,7 @@ const Home: React.FC = () => {
   const [tournaments, setTournaments] = useState<Tournament[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>('');
-  const [limit, setLimit] = useState<number>(10); // You can change the limit as needed
+  const [limit, setLimit] = useState<number>(10);
 
   useEffect(() => {
     const fetchTournaments = async () => {

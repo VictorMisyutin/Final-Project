@@ -15,7 +15,7 @@ const Register: React.FC = () => {
   const [success, setSuccess] = useState('');
   const navigate = useNavigate();
 
-  const sports = ['Soccer', 'Basketball', 'Tennis', 'Baseball', 'Golf']; // List of available sports
+  const sports = ['Soccer', 'Basketball', 'Tennis', 'Baseball', 'Golf'];
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -29,7 +29,7 @@ const Register: React.FC = () => {
     e.preventDefault();
 
     try {
-      const response = await fetch(config.backendUrl + '/api/users', { // replace with your API endpoint
+      const response = await fetch(config.backendUrl + '/api/users', { 
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

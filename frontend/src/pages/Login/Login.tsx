@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';  // Import useNavigate instead of useHistory
+import { Link, useNavigate } from 'react-router-dom';  
 import './Login.css';
 import config from '../../config'
 
@@ -8,7 +8,7 @@ const Login: React.FC = () => {
   const [password, setPassword] = useState<string>('');
   const [error, setError] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
-  const navigate = useNavigate();  // useNavigate hook to handle navigation
+  const navigate = useNavigate(); 
 
   const handleLogin = async () => {
     setLoading(true);
@@ -32,9 +32,9 @@ const Login: React.FC = () => {
   
       const data = await response.json();
       localStorage.setItem('token', data.data.token);
-      navigate('/dashboard');  // Redirect to dashboard or other page
+      navigate('/dashboard');
     } catch (err: any) {
-      setError(err.message);  // Display error message
+      setError(err.message);  
     } finally {
       setLoading(false);
     }

@@ -6,9 +6,8 @@ import config from '../../config';
 const Header: React.FC = () => {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
   const location = useLocation();
-  const navigate = useNavigate(); // Hook to navigate programmatically
+  const navigate = useNavigate();
 
-  // Checking if the user is authenticated whenever the location changes
   useEffect(() => {
     const checkAuth = async () => {
       const token = localStorage.getItem('token');
@@ -59,7 +58,7 @@ const Header: React.FC = () => {
       <Link to="/" className="title">Tourney Tally</Link>
       <div className="right-side">
         <Link to="/" className="link">Home</Link>
-        {isAuthenticated && <Link to="/dashboard" className="link">Dashboard</Link>} {/* Conditionally render the Dashboard link */}
+        {isAuthenticated && <Link to="/dashboard" className="link">Dashboard</Link>}
         <Link to="/" className="link">Players</Link>
         <Link to="/" className="link">Results</Link>
         { isAuthenticated && <Link to="/add-match" className="link">Add Match</Link>}

@@ -54,7 +54,6 @@ exports.loginUser = (req, res) => {
                 return res.status(400).json({ message: 'Invalid credentials' });
             }
 
-            // Compare the entered password with the stored hashed password
             bcrypt.compare(password, user.password, (err, isMatch) => {
                 if (err) {
                     return res.status(500).json({ message: 'Error comparing passwords' });
@@ -64,17 +63,16 @@ exports.loginUser = (req, res) => {
                     return res.status(400).json({ message: 'Invalid credentials' });
                 }
 
-                // Create JWT Token
                 const token = jwt.sign(
                     { userId: user._id },
-                    'your_jwt_secret', // Use a secret key for signing the token
-                    { expiresIn: '1h' } // The token will expire in 1 hour
+                    'your_jwt_secret', 
+                    { expiresIn: '1h' }
                 );
 
                 res.json({
                     message: 'Login successful',
                     data: {
-                        token, // Send the token to the client
+                        token,
                         user: {
                             name: user.name,
                             email: user.email,
@@ -101,17 +99,14 @@ exports.verifyUser = async (req, res) => {
     }
 
     try {
-        // Verify the token
         const decoded = jwt.verify(token, SECRET_KEY);
 
-        // Check if the user exists
         const user = await User.findById(decoded.userId);
         
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
         }
 
-        // Respond with success and user info (if needed)
         return res.status(200).json({
             message: 'Token is valid',
             user: { id: user._id, email: user.email, name: user.name },
@@ -138,7 +133,7 @@ exports.createUser = (req, res) => {
                 return res.status(400).json({ message: 'Email already exists', data: {} });
             }
 
-            const newUser = new User({ name, email, password, sport, elo }); // Include sport here
+            const newUser = new User({ name, email, password, sport, elo }); 
             newUser.save()
                 .then(user => res.status(201).json({ message: 'User created', data: user }))
                 .catch(err => res.status(500).json({ message: 'Error creating user', data: err }));
@@ -170,7 +165,7 @@ exports.deleteUser = (req, res) => {
             if (!user) {
                 return res.status(404).json({ message: 'User not found', data: {} });
             }
-            res.json({ message: 'User deleted', data: {} }); // Send response after deletion
+            res.json({ message: 'User deleted', data: {} });
         })
         .catch(err => res.status(500).json({ message: 'Error deleting user', data: err }));
 };

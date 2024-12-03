@@ -23,12 +23,11 @@ const AddMatch: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
-    // Fetch all users (players)
     const fetchUsers = async () => {
       try {
         const response = await fetch(config.backendUrl + '/api/users');
         const data = await response.json();
-        setPlayers(data.data); // assuming the response has the 'data' field with users
+        setPlayers(data.data);
       } catch (error) {
         console.error('Error fetching players:', error);
       }
@@ -39,7 +38,7 @@ const AddMatch: React.FC = () => {
       try {
         const response = await fetch(config.backendUrl + '/api/tournaments');
         const data = await response.json();
-        setTournaments(data.data); // assuming the response has the 'data' field with tournaments
+        setTournaments(data.data);
       } catch (error) {
         console.error('Error fetching tournaments:', error);
       }
@@ -71,7 +70,7 @@ const AddMatch: React.FC = () => {
           playerOneId,
           playerTwoId,
           tournamentId,
-          startDate: new Date(startDate).toISOString(), // Ensure the start date is in the correct format
+          startDate: new Date(startDate).toISOString(),
         }),
       });
 

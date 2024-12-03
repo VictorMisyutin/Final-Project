@@ -6,17 +6,16 @@ const Dashboard: React.FC = () => {
   const [matches, setMatches] = useState<any[]>([]);
   const [userName, setUserName] = useState<string>('');
   const [userRating, setUserRating] = useState<number>(0);
-  const userId = "674082564cab72df408cf8dc"; // Replace with the actual user ID from context or props
+  const userId = "674082564cab72df408cf8dc";
 
   useEffect(() => {
-    // Fetch user data (name and rating)
     const fetchUserData = async () => {
       try {
         const response = await fetch(config.backendUrl + `/api/users/${userId}`);
         const data = await response.json();
         if (data.message === 'OK') {
-          setUserName(data.data.name); // Assuming the user's name is stored in `data.data.name`
-          setUserRating(data.data.rating); // Assuming the user's rating is stored in `data.data.rating`
+          setUserName(data.data.name);
+          setUserRating(data.data.rating);
         } else {
           console.error('Failed to fetch user data');
         }
@@ -25,13 +24,12 @@ const Dashboard: React.FC = () => {
       }
     };
 
-    // Fetch recent matches of the user
     const fetchRecentMatches = async () => {
       try {
         const response = await fetch(config.backendUrl + `/api/matches/${userId}`);
         const data = await response.json();
         if (data.message === 'OK') {
-          setMatches(data.data); // Store the fetched matches
+          setMatches(data.data);
         } else {
           console.error('Failed to fetch recent matches');
         }
@@ -42,7 +40,7 @@ const Dashboard: React.FC = () => {
 
     fetchUserData();
     fetchRecentMatches();
-  }, [userId]); // Trigger the fetch when the userId changes
+  }, [userId]);
 
   return (
     <div className="page-container">
@@ -51,7 +49,6 @@ const Dashboard: React.FC = () => {
           <h1>Dashboard</h1>
         </div>
         <div className="right-side">
-          {/* Display user's name and rating dynamically */}
           <p className="player-welcome">Welcome {userName || 'Loading...'}</p>
           <p className="player-rating">Your Current Rating is: {userRating || '--'}</p>
         </div>

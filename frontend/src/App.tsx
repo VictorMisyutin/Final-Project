@@ -20,7 +20,7 @@ function App() {
       <Route path="/login" element={<Login />}/>
       <Route path="/register" element={<Register />}/>
       <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>}/>
-      <Route path="/add-match" element={<AddMatch />}/>
+      <Route path="/add-match" element={<ProtectedRoute><AddMatch /></ProtectedRoute>}/>
     </Routes>
     </>
   );

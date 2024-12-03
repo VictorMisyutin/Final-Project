@@ -29,12 +29,10 @@ exports.getTournaments = (req, res) => {
 exports.createTournament = (req, res) => {
     const { title, City, State, Country, Sport, startDate, endDate } = req.body;
 
-    // Validate that required fields are provided
     if (!title || !City || !Country || !Sport) {
         return res.status(400).json({ message: 'Title, City, and Country are required fields' });
     }
 
-    // Create a new tournament instance
     const newTournament = new Tournament({
         title,
         City,
@@ -44,10 +42,9 @@ exports.createTournament = (req, res) => {
         startDate,
         endDate,
         dateCreated: Date.now(),
-        users: [] // Initial empty array for users
+        users: [] 
     });
 
-    // Save the tournament to the database
     newTournament.save()
         .then(tournament => {
             res.status(201).json({ message: 'Tournament created successfully', data: tournament });
@@ -62,12 +59,10 @@ exports.updateTournament = (req, res) => {
     const tournamentId = req.params.tournamentId;
     const updates = req.body;
 
-    // Validate that at least one field is provided for updating
     if (!Object.keys(updates).length) {
         return res.status(400).json({ message: 'No fields to update' });
     }
 
-    // Update the tournament
     Tournament.findByIdAndUpdate(tournamentId, updates, { new: true, runValidators: true })
         .then(updatedTournament => {
             if (!updatedTournament) {
@@ -85,7 +80,6 @@ exports.registerUserForTournament = (req, res) => {
     const tournamentId = req.params.tournamentId;
     const userId = req.body.userId;
 
-    // Ensure the user and tournament exist
     Promise.all([
         Tournament.findById(tournamentId),
         User.findById(userId)
@@ -98,12 +92,10 @@ exports.registerUserForTournament = (req, res) => {
             return res.status(404).json({ message: 'User not found' });
         }
 
-        // Check if the user is already registered for the tournament
         if (tournament.users.includes(userId)) {
             return res.status(400).json({ message: 'User already registered for this tournament' });
         }
 
-        // Add the user to the tournament's user array
         tournament.users.push(userId);
 
         return tournament.save();
@@ -119,7 +111,6 @@ exports.unregisterUserFromTournament = (req, res) => {
     const tournamentId = req.params.tournamentId;
     const userId = req.body.userId;
 
-    // Ensure the user and tournament exist
     Promise.all([
         Tournament.findById(tournamentId),
         User.findById(userId)
@@ -132,12 +123,10 @@ exports.unregisterUserFromTournament = (req, res) => {
             return res.status(404).json({ message: 'User not found' });
         }
 
-        // Check if the user is registered for the tournament
         if (!tournament.users.includes(userId)) {
             return res.status(400).json({ message: 'User is not registered for this tournament' });
         }
 
-        // Remove the user from the tournament's user array
         tournament.users.pull(userId);
 
         return tournament.save();
