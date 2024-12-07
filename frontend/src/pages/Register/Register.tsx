@@ -15,7 +15,7 @@ const Register: React.FC = () => {
   const [success, setSuccess] = useState('');
   const navigate = useNavigate();
 
-  const sports = ['Soccer', 'Basketball', 'Tennis', 'Baseball', 'Golf'];
+  const sports = ['Soccer', 'Basketball', 'Tennis', 'Baseball', 'Golf', 'Table Tennis'];
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;

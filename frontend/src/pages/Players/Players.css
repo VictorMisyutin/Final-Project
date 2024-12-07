@@ -1,0 +1,56 @@
+.page-container {
+    padding: 20px;
+  }
+  
+  .hero {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .search-filters {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+  }
+  
+  .search-input {
+    padding: 10px;
+    font-size: 16px;
+    flex: 1 1 100px;
+  }
+  
+  .search-dropdown {
+    padding: 10px;
+    font-size: 16px;
+    flex: 1 1 100px;
+  }
+  
+  .search-button {
+    padding: 10px 15px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  
+  .results-section {
+    margin-top: 20px;
+  }
+  
+  .data-header, .player-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+  }
+  
+  .player-name, .player-gender, .player-rating, .player-actions {
+    flex: 1;
+    width: 200px;
+  }
+  
+  .no-results {
+    margin-top: 20px;
+    text-align: center;
+    color: #999;
+  }
+  

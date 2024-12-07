@@ -10,6 +10,8 @@ import Login from './pages/Login/Login';
 import Register from './pages/Register/Register';
 import Dashboard from './pages/Dashboard/Dashboard';
 import AddMatch from './pages/AddMatch/AddMatch';
+import Players from './pages/Players/Players';
+import Results from './pages/Results/Results';
 
 function App() {
   return (
@@ -21,6 +23,8 @@ function App() {
       <Route path="/register" element={<Register />}/>
       <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>}/>
       <Route path="/add-match" element={<ProtectedRoute><AddMatch /></ProtectedRoute>}/>
+      <Route path="/players" element={<Players /> }/>
+      <Route path="/results" element={<Results />}/>
     </Routes>
     </>
   );
