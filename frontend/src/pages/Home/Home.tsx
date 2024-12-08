@@ -3,15 +3,14 @@ import { FaChess, FaTableTennis } from 'react-icons/fa';
 import { RiBilliardsFill, RiBoxingFill } from 'react-icons/ri';
 import { IoGameController, IoTennisballSharp } from 'react-icons/io5';
 import './Home.css';
-import config from '../../config'
-
+import config from '../../config';
 
 interface Tournament {
   title: string;
   City: string;
   State: string;
   Country: string;
-  Sport: string;
+  Sport: { sport: string };
   startDate: string;
   endDate: string;
 }
@@ -25,7 +24,7 @@ const Home: React.FC = () => {
   useEffect(() => {
     const fetchTournaments = async () => {
       try {
-        const response = await fetch(config.backendUrl + `/api/tournaments?limit=${limit}`); 
+        const response = await fetch(config.backendUrl + `/api/tournaments?limit=${limit}`);
         if (!response.ok) {
           throw new Error('Failed to fetch tournaments');
         }
@@ -40,7 +39,6 @@ const Home: React.FC = () => {
 
     fetchTournaments();
   }, [limit]);
-
 
   if (error) {
     return <div>Error: {error}</div>;
@@ -85,7 +83,7 @@ const Home: React.FC = () => {
             <div className="tourney-city">{tournament.City}</div>
             <div className="tourney-state">{tournament.State}</div>
             <div className="tourney-country">{tournament.Country}</div>
-            <div className="tourney-sport">{tournament.Sport}</div>
+            <div className="tourney-sport">{tournament.Sport.sport}</div>
             <div className="tourney-date">{new Date(tournament.startDate).toLocaleDateString()}</div>
           </div>
         ))}

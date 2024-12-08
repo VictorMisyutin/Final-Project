@@ -3,11 +3,13 @@ const bcrypt = require('bcryptjs');
 
 const UserSchema = new mongoose.Schema({
     firstName: { type: String, required: true },
+    middleName: { type: String, required: false },
     lastName: { type: String, required: true },
-    gender: {type: String, enum: ['Male', 'Female', 'Other'], required: true},
+    gender: { type: String, required: true },
+    dateOfBirth: { type: Date, required: true },
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
-    sport: { type: String, enum: ['Soccer', 'Basketball', 'Tennis', 'Baseball', 'Golf', 'Table Tennis'], required: true },
+    sport: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Sport' }],
     elo: { type: Number, required: true },
     dateCreated: { type: Date, default: Date.now }
 });

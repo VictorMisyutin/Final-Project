@@ -3,6 +3,7 @@ const router = express.Router();
 const userController = require('../controllers/userController');
 const tournamentController = require('../controllers/tournamentController');
 const matchController = require('../controllers/matchController')
+const sportController = require('../controllers/sportController');
 
 // User Routes
 router.route('/users')
@@ -48,5 +49,15 @@ router.route('/matches/:matchId')
 
 router.route('/tournaments/:tournamentId/matches')
 .get(matchController.getMatchesByTournament);
+
+// Sport Routes
+router.route('/sports')
+    .get(sportController.getSports);
+    // .post(sportController.createSport);
+
+router.route('/sports/:id')
+    .get(sportController.getSportById);
+    // .put(sportController.updateSport)
+    // .delete(sportController.deleteSport);
 
 module.exports = router;
