@@ -1,49 +1,52 @@
-.page-container {
-    padding: 20px;
-  }
-  
-  .hero {
-    text-align: center;
-    margin-bottom: 20px;
-  }
-  
-  .search-filters {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-    margin-bottom: 20px;
-  }
-  
-  .search-input {
-    padding: 10px;
-    font-size: 16px;
-    flex: 1 1 200px;
-  }
-  
-  .search-button {
-    padding: 10px 15px;
-    font-size: 16px;
-    cursor: pointer;
-  }
-  
-  .results-section {
-    margin-top: 20px;
-  }
-  
-  .data-header, .tournament-row {
-    display: flex;
-    justify-content: space-between;
-    padding: 10px;
-    border-bottom: 1px solid #ccc;
-  }
-  
-  .tournament-title, .tournament-location, .tournament-dates, .tournament-sport {
-    flex: 1;
-  }
-  
-  .no-results {
-    margin-top: 20px;
-    text-align: center;
-    color: #999;
-  }
+/* Reused CSS from Players.css and Home.css*/
+.results-page-container {
+  .hero{
+    background-color: transparent;
+    width: 80%;
+    display: grid;
+    grid-template-columns: 0.65fr 1fr;
+    gap: 0;
+    .left-side{
+        margin-left: 40px;
+        h1{
+            font-size: 50px;
+        }
+    }
+    .right-side{
+        margin: 0px auto;
+        display: block;
+        text-align: left;
+        .player-welcome{
+            margin-bottom: 40px;
+        } 
+    }
+}
+}
+
+.tournament-results-section {
+  display: flex;
+  flex-direction: column;
+  background-color: #dddddd;
+  padding: 20px;
+  border-radius: 8px;
+  width: 80%;
+  min-height: 300px;
+  margin: 75px auto;
+}
+.tournament-row {
+  display: flex;
+  padding: 10px 0;
+  border-bottom: 1px solid #ccc;
+  list-style: none;
+  margin: 0;
+}
+
+.tournament-item {
+  flex: 1;
+  text-align: center;
+}
+
+.tournament-row:nth-child(even) {
+  background-color: #a3a3a3;
+}
   

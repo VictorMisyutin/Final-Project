@@ -41,9 +41,16 @@ const Players: React.FC = () => {
   };
 
   return (
-    <div className="page-container">
+    <div className="players-page-container">
       <div className="hero">
-        <h1>Players Search</h1>
+        <div className="left-side">
+          <h1 className="title">Player Search</h1>
+        </div>
+        <div className="right-side">
+          <p className="description">
+            Search for players by name, rating, sport, and gender. View profiles and meet the competition.
+          </p>
+        </div>
       </div>
       <div className="search-filters">
         <input
@@ -101,23 +108,23 @@ const Players: React.FC = () => {
       <div className="results-section">
         {searchResults.length > 0 ? (
           <>
-            <div className="data-header">
-              <div className="player-name">First Name</div>
-              <div className="player-name">Last Name</div>
-              <div className="player-gender">Gender</div>
-              <div className="player-rating">Rating</div>
-              <div className="player-actions">Actions</div>
-            </div>
+            <ul className="data-header">
+              <li className="header-item">First Name</li>
+              <li className="header-item">Last Name</li>
+              <li className="header-item">Gender</li>
+              <li className="header-item">Rating</li>
+              <li className="header-item">Actions</li>
+            </ul>
             {searchResults.map((player, index) => (
-              <div className="player-row" key={index}>
-                <div className="player-name">{player.firstName}</div>
-                <div className="player-name">{player.lastName}</div>
-                <div className="player-gender">{player.gender || '--'}</div>
-                <div className="player-rating">{player.rating ?? '--'}</div>
-                <div className="player-actions">
-                  <button className="view-profile-button">View Profile</button>
-                </div>
-              </div>
+              <ul className="player-row" key={index}>
+                <li className="player-item">{player.firstName || '--'}</li>
+                <li className="player-item">{player.lastName || '--'}</li>
+                <li className="player-item">{player.gender || '--'}</li>
+                <li className="player-item">{player.rating ?? '--'}</li>
+                <li className="player-item">
+                  <button className="action-button">View Profile</button>
+                </li>
+              </ul>
             ))}
           </>
         ) : (

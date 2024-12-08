@@ -43,9 +43,17 @@ const Results: React.FC = () => {
   };
 
   return (
-    <div className="page-container">
+    <div className="results-page-container">
       <div className="hero">
-        <h1>Tournament Results</h1>
+        
+        <div className="left-side">
+          <h1 className="title">Tournament Results</h1>
+        </div>
+        <div className="right-side">
+          <p className="description">
+            Search for tournaments by name, city, state, country, sport, start date, and end date.
+          </p>
+        </div>
       </div>
       <div className="search-filters">
         <input
@@ -103,27 +111,27 @@ const Results: React.FC = () => {
           {isLoading ? 'Searching...' : 'Search'}
         </button>
       </div>
-      <div className="results-section">
+      <div className="tournament-results-section">
         {results.length > 0 ? (
           <>
-            <div className="data-header">
-              <div className="tournament-title">Title</div>
-              <div className="tournament-location">Location</div>
-              <div className="tournament-dates">Dates</div>
-              <div className="tournament-sport">Sport</div>
-            </div>
+            <ul className="data-header">
+              <li className="header-item">Title</li>
+              <li className="header-item">Location</li>
+              <li className="header-item">Dates</li>
+              <li className="header-item">Sport</li>
+            </ul>
             {results.map((tournament, index) => (
-              <div className="tournament-row" key={index}>
-                <div className="tournament-title">{tournament.title}</div>
-                <div className="tournament-location">
+              <ul className="tournament-row" key={index}>
+                <li className="tournament-item">{tournament.title}</li>
+                <li className="tournament-item">
                   {tournament.City}, {tournament.State}, {tournament.Country}
-                </div>
-                <div className="tournament-dates">
+                </li>
+                <li className="tournament-item">
                   {new Date(tournament.startDate).toLocaleDateString()} -{' '}
                   {new Date(tournament.endDate).toLocaleDateString()}
-                </div>
-                <div className="tournament-sport">{tournament.Sport}</div>
-              </div>
+                </li>
+                <li className="tournament-item">{tournament.Sport}</li>
+              </ul>
             ))}
           </>
         ) : (
