@@ -5,7 +5,7 @@ var TournamentsSchema = new mongoose.Schema({
     City: { type: String, required: true },
     State: { type: String },
     Country: { type: String, required: true },
-    Sport: { type: String, required: true },
+    Sport: { type: mongoose.Schema.Types.ObjectId, ref: 'Sport', required: true },
     startDate: { type: Date, default: Date.now },
     endDate: { type: Date, default: Date.now },
     dateCreated: { type: Date, default: Date.now },

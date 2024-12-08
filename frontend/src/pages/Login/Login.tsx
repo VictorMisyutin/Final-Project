@@ -1,28 +1,28 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';  
+import { Link, useNavigate } from 'react-router-dom';
 import './Login.css';
-import config from '../../config'
+import config from '../../config';
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [error, setError] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
 
   const handleLogin = async () => {
     setLoading(true);
     setError('');
   
     try {
-      const response = await fetch( config.backendUrl + '/api/users/login', {
+      const response = await fetch(config.backendUrl + '/api/users/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          email,
-          password,
+          email: email.trim(),
+          password: password.trim(),
         }),
       });
   
@@ -32,9 +32,10 @@ const Login: React.FC = () => {
   
       const data = await response.json();
       localStorage.setItem('token', data.data.token);
+      localStorage.setItem('userId', data.data.user.id); 
       navigate('/dashboard');
     } catch (err: any) {
-      setError(err.message);  
+      setError(err.message);
     } finally {
       setLoading(false);
     }

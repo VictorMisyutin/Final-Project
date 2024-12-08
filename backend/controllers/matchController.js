@@ -1,6 +1,8 @@
 const Match = require('../models/match');
-const Tournament = require('../models/tournament');
 const User = require('../models/user');
+const Tournament = require('../models/tournament');
+const Sport = require('../models/sport');
+
 
 
 exports.createMatch = (req, res) => {
@@ -21,6 +23,10 @@ exports.createMatch = (req, res) => {
         }
         if (!tournament) {
             return res.status(404).json({ message: 'Tournament not found' });
+        }
+
+        if (!tournament.Sport) {
+            return res.status(400).json({ message: 'Tournament must have a sport associated with it' });
         }
 
         const newMatch = new Match({
@@ -46,6 +52,8 @@ exports.getMatchesByTournament = (req, res) => {
     const tournamentId = req.params.tournamentId;
 
     Match.find({ TournamentId: tournamentId })
+        .populate('playerOne playerTwo', 'firstName lastName elo') 
+        .populate('TournamentId', 'title Sport') 
         .then(matches => res.json({ message: 'OK', data: matches }))
         .catch(err => res.status(500).json({ message: 'Error fetching matches', data: err }));
 };
@@ -61,13 +69,13 @@ exports.getRecentMatchesByUser = (req, res) => {
     Match.find({ $or: [{ playerOne: userId }, { playerTwo: userId }] })
         .sort({ startDate: -1 })
         .limit(6)
-        .populate('playerOne playerTwo', 'name elo')
+        .populate('playerOne', 'firstName lastName elo')  
+        .populate('playerTwo', 'firstName lastName elo')
+        .populate('TournamentId', 'title Sport')
         .then(matches => {
             if (matches.length === 0) {
                 return res.json({ message: 'No recent matches found', data: [] });
             }
-
-            console.log('Matches:', matches);
 
             const recentMatches = matches.map(match => {
                 if (!match.playerOne || !match.playerTwo) {
@@ -78,20 +86,19 @@ exports.getRecentMatchesByUser = (req, res) => {
                 const isPlayerOne = match.playerOne._id.toString() === userId;
                 const opponent = isPlayerOne ? match.playerTwo : match.playerOne;
 
-                // Get the winner and rating change based on the result
-                const result = match.Winner && match.Winner.toString() === match.playerOne.toString()
-                    ? 'Player One Wins'
-                    : 'Player Two Wins';
-
-                const ratingChange = match.Winner && match.Winner.toString() === match.playerOne.toString()
-                    ? match.RatingChangeForWinner
-                    : -match.RatingChangeForWinner;
-
+                const opponentName = opponent ? `${opponent.firstName} ${opponent.lastName}` : 'Unknown';
+                let calculatedResult = ""; 
+                if (match.winnezr == userId)
+                    calculatedResult = "Win"; 
+                else
+                calculatedResult = "Lose"
                 return {
-                    opponent: opponent.name,
+                    opponent: opponentName, 
                     opponent_rating: opponent.elo,
-                    result: result || 'N/A', 
-                    rating_change: ratingChange || 0, 
+                    result: calculatedResult,
+                    rating_change: match.ratingChange,
+                    tournament: match.TournamentId.title,
+                    sport: match.TournamentId.Sport.sport, 
                     start_date: match.startDate
                 };
             }).filter(Boolean);
@@ -103,6 +110,7 @@ exports.getRecentMatchesByUser = (req, res) => {
             res.status(500).json({ message: 'Error fetching matches', data: err });
         });
 };
+
 
 // Get a match by ID
 exports.getMatchById = (req, res) => {
@@ -118,7 +126,7 @@ exports.getMatchById = (req, res) => {
         .catch(err => res.status(500).json({ message: 'Error fetching match', data: err }));
 };
 
-// Update match details (e.g., match result)
+// Update match details
 exports.updateMatch = (req, res) => {
     const matchId = req.params.matchId;
     const { endDate, winnerId, ratingChange } = req.body;

@@ -4,12 +4,15 @@ import config from '../../config';
 
 interface User {
   _id: string;
-  name: string;
+  firstName: string;
+  lastName: string;
+  sport: string[];
 }
 
 interface Tournament {
   _id: string;
   title: string;
+  sport: string;
 }
 
 const AddMatch: React.FC = () => {
@@ -33,7 +36,6 @@ const AddMatch: React.FC = () => {
       }
     };
 
-    // Fetch all tournaments
     const fetchTournaments = async () => {
       try {
         const response = await fetch(config.backendUrl + '/api/tournaments');
@@ -107,7 +109,7 @@ const AddMatch: React.FC = () => {
             <option value="">Select Player 1</option>
             {players.map((player) => (
               <option key={player._id} value={player._id}>
-                {player.name}
+                {player.firstName} {player.lastName}
               </option>
             ))}
           </select>
@@ -123,7 +125,7 @@ const AddMatch: React.FC = () => {
             <option value="">Select Player 2</option>
             {players.map((player) => (
               <option key={player._id} value={player._id}>
-                {player.name}
+                {player.firstName} {player.lastName}
               </option>
             ))}
           </select>

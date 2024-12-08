@@ -1,5 +1,6 @@
 const Tournament = require('../models/tournament');
 const User = require('../models/user');
+const Sport = require('../models/sport');
 
 // Get all tournaments
 exports.getTournaments = (req, res) => {
@@ -20,42 +21,48 @@ exports.getTournaments = (req, res) => {
             .select(select)
             .skip(skip)
             .limit(limit)
+            .populate('Sport', 'sport')
             .then(tournaments => res.json({ message: 'OK', data: tournaments }))
             .catch(err => res.status(500).json({ message: 'Error fetching tournaments', data: err }));
     }
 };
 
+
 // Create a new tournament
-exports.createTournament = (req, res) => {
+exports.createTournament = async (req, res) => {
     const { title, City, State, Country, Sport, startDate, endDate } = req.body;
 
     if (!title || !City || !Country || !Sport) {
-        return res.status(400).json({ message: 'Title, City, and Country are required fields' });
+        return res.status(400).json({ message: 'Title, City, Country, and Sport are required fields' });
     }
 
-    const newTournament = new Tournament({
-        title,
-        City,
-        State,
-        Country,
-        Sport,
-        startDate,
-        endDate,
-        dateCreated: Date.now(),
-        users: [] 
-    });
+    try {
+        const sport = await Sport.findById(Sport);
+        if (!sport) {
+            return res.status(400).json({ message: 'Invalid Sport ID', data: {} });
+        }
 
-    newTournament.save()
-        .then(tournament => {
-            res.status(201).json({ message: 'Tournament created successfully', data: tournament });
-        })
-        .catch(err => {
-            res.status(500).json({ message: 'Error creating tournament', data: err });
+        const newTournament = new Tournament({
+            title,
+            City,
+            State,
+            Country,
+            Sport, 
+            startDate,
+            endDate,
+            dateCreated: Date.now(),
+            users: [] 
         });
+
+        await newTournament.save();
+        res.status(201).json({ message: 'Tournament created successfully', data: newTournament });
+    } catch (err) {
+        res.status(500).json({ message: 'Error creating tournament', data: err });
+    }
 };
 
 // Update an existing tournament
-exports.updateTournament = (req, res) => {
+exports.updateTournament = async (req, res) => {
     const tournamentId = req.params.tournamentId;
     const updates = req.body;
 
@@ -63,17 +70,24 @@ exports.updateTournament = (req, res) => {
         return res.status(400).json({ message: 'No fields to update' });
     }
 
-    Tournament.findByIdAndUpdate(tournamentId, updates, { new: true, runValidators: true })
-        .then(updatedTournament => {
-            if (!updatedTournament) {
-                return res.status(404).json({ message: 'Tournament not found' });
-            }
-            res.json({ message: 'Tournament updated successfully', data: updatedTournament });
-        })
-        .catch(err => {
-            res.status(500).json({ message: 'Error updating tournament', data: err });
-        });
+    if (updates.Sport) {
+        const sport = await Sport.findById(updates.Sport);
+        if (!sport) {
+            return res.status(400).json({ message: 'Invalid Sport ID', data: {} });
+        }
+    }
+
+    try {
+        const updatedTournament = await Tournament.findByIdAndUpdate(tournamentId, updates, { new: true, runValidators: true });
+        if (!updatedTournament) {
+            return res.status(404).json({ message: 'Tournament not found' });
+        }
+        res.json({ message: 'Tournament updated successfully', data: updatedTournament });
+    } catch (err) {
+        res.status(500).json({ message: 'Error updating tournament', data: err });
+    }
 };
+
 
 // Register a user for a tournament
 exports.registerUserForTournament = (req, res) => {
@@ -105,6 +119,7 @@ exports.registerUserForTournament = (req, res) => {
     })
     .catch(err => res.status(500).json({ message: 'Error registering user', data: err }));
 };
+
 
 // Unregister a user from a tournament
 exports.unregisterUserFromTournament = (req, res) => {
