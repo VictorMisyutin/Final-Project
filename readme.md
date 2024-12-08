@@ -4,6 +4,9 @@ This repo hold both the back-end and the front-end for this project.
 To run the front-end, CD into "frontend" directory and run "npm start"
 To run the back-end, CD into "backend" directory and run "npm start"
 
+The front-end runs on localhost:3000
+and the back-end runs on localhost:4000
+
 Both of these need to be running for the app to work correctly.
 
 I did a lot more than I thought I was going to because I was bored.
