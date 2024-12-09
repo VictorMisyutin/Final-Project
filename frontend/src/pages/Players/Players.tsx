@@ -42,12 +42,12 @@ const Players: React.FC = () => {
   }
 
   const getSportNameByID = (sportID: string) => {
-    const sport = sports.find((s) => s._id === sportID);
-    return sport ? sport.sport : '--';
+    const sportName = sports.find((s) => s._id === sportID[0]);
+    return sportName ? sportName.sport : '--';
   }
   const filterResultsByRating = (players: any[]) => {
     return players.filter(player => {
-      const elo = player.elo || 0; // default to 0 if elo is not available
+      const elo = player.elo || 0;
       const isAboveMinRating = minRating !== '' ? elo >= minRating : true;
       const isBelowMaxRating = maxRating !== '' ? elo <= maxRating : true;
       return isAboveMinRating && isBelowMaxRating;
