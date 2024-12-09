@@ -1,52 +1,82 @@
 /* Reused CSS from Home.css */
 
 .players-page-container {
-  .hero{
-        background-color: transparent;
-        width: 80%;
-        display: grid;
-        grid-template-columns: 0.65fr 1fr;
-        gap: 0;
-        .left-side{
-            margin-left: 40px;
-            h1{
-                font-size: 50px;
-            }
-        }
-        .right-side{
-            margin: 0px auto;
-            display: block;
-            text-align: left;
-            .player-welcome{
-                margin-bottom: 40px;
-            } 
-        }
-    }
-}
-.search-filters {
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-  margin-bottom: 20px;
-}
+  .hero {
+    display: flex; 
+    align-items: center; 
+    justify-content: space-between; 
+    background-color: transparent;
+    width: 80%;
+    margin: 0 auto;
+    gap: 20px; 
+  }
   
-.search-input {
-  padding: 10px;
-  font-size: 16px;
-  flex: 1 1 100px;
+  .hero .left-side {
+    flex: 0 0 auto; 
+    margin-left: 0; 
+  }
+  
+  .hero .right-side {
+    flex: 1 1 auto; 
+    text-align: left; 
+  }
+  
+  .hero .title {
+    font-size: 50px;
+    font-weight: bold;
+    margin: 0;
+  }
+  
+  .hero .description {
+    font-size: 16px;
+    line-height: 1.5;
+    margin: 0;
+  }
 }
 
-.search-dropdown {
+.search-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px; 
+  margin: 20px auto; 
   padding: 10px;
-  font-size: 16px;
-  flex: 1 1 100px;
+  width: calc(100% - 20px); 
+  max-width: 1600px; 
+  background-color: #f9f9f9;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-shadow: 0px 2px 5px #0000001a;
+}
+
+.search-input,
+.search-dropdown {
+  flex: 1 1 200px; 
+  padding: 10px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
 }
 
 .search-button {
-  padding: 10px 15px;
-  font-size: 16px;
+  flex: 1 1 100px; 
+  padding: 10px 20px;
+  background-color: green;
+  color: white;
+  border: none;
+  border-radius: 4px;
   cursor: pointer;
+  font-size: 16px;
 }
+
+.search-button:hover {
+  background-color: darkgreen;
+}
+
+.search-button:disabled {
+  background-color: lightgray;
+  cursor: not-allowed;
+}
+
 
 .results-section {
   display: flex;
