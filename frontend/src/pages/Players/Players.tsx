@@ -149,7 +149,7 @@ const Players: React.FC = () => {
           onChange={(e) => setSport(e.target.value)}
         >
           {sports.map((s) => (
-            <option value={s}>{s}</option>
+            <option value={s._id}>{s.sport}</option>
           ))}
         </select>
         
