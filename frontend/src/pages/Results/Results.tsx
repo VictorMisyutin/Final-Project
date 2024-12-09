@@ -1,6 +1,24 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect} from 'react';
 import './Results.css';
 import config from '../../config';
+
+interface Sport {
+  id: string;
+  sport: string;
+}
+
+interface Tournament {
+  title: string;
+  City: string;
+  State: string;
+  Country: string;
+  Sport: {
+    _id: string;
+    sport: string;
+  };
+  startDate: string;
+  endDate: string;
+}
 
 const Results: React.FC = () => {
   const [title, setTitle] = useState<string>('');
@@ -12,22 +30,40 @@ const Results: React.FC = () => {
   const [endDate, setEndDate] = useState<string>('');
   const [results, setResults] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const sports = ['Soccer', 'Basketball', 'Tennis', 'Baseball', 'Golf', 'Table Tennis'];
+  const [sports, setSports] = useState<Sport[]>([])
 
+  useEffect(() => {
+    const fetchSports = async () => {
+      try {
+        const response = await fetch(`${config.backendUrl}/api/sports`);
+        if (!response.ok) throw new Error('Failed to fetch sports');
+        const data = await response.json();
+        if (data.message === 'OK') {
+          setSports(data.data);
+        } else {
+          console.error('Failed to fetch sports data');
+        }
+      } catch (err) {
+        console.error('Error fetching sports:', err);
+      }
+    };
+
+    fetchSports();
+  }, []);
   const handleSearch = async () => {
     setIsLoading(true);
 
     try {
       const params = new URLSearchParams();
       if (title) params.append('title', title);
-      if (city) params.append('city', city);
-      if (state) params.append('state', state);
-      if (country) params.append('country', country);
-      if (sport) params.append('sport', sport);
+      if (city) params.append('City', city);
+      if (state) params.append('State', state);
+      if (country) params.append('Country', country);
+      if (sport) params.append('Sport', sport);
       if (startDate) params.append('startDate', startDate);
       if (endDate) params.append('endDate', endDate);
 
-      const response = await fetch(`${config.backendUrl}/api/tournaments/?${params.toString()}`);
+      const response = await fetch(`${config.backendUrl}/api/tournaments?${params.toString()}`);
       const data = await response.json();
 
       if (data.message === 'OK') {
@@ -89,8 +125,9 @@ const Results: React.FC = () => {
           value={sport}
           onChange={(e) => setSport(e.target.value)}
         >
+          <option value="">Select Sport</option>
           {sports.map((s) => (
-            <option value={s}>{s}</option>
+            <option value={s.id} key ={s.id}>{s.sport}</option>
           ))}
         </select>
         <input
@@ -130,7 +167,7 @@ const Results: React.FC = () => {
                   {new Date(tournament.startDate).toLocaleDateString()} -{' '}
                   {new Date(tournament.endDate).toLocaleDateString()}
                 </li>
-                <li className="tournament-item">{tournament.Sport}</li>
+                <li className="tournament-item">{tournament.Sport.sport}</li>
               </ul>
             ))}
           </>
