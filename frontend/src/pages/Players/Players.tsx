@@ -1,6 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './Players.css';
 import config from '../../config';
+
+interface Sport {
+  _id: string;
+  sport: string;
+}
 
 const Players: React.FC = () => {
   const [firstName, setFirstName] = useState<string>('');
@@ -11,25 +16,60 @@ const Players: React.FC = () => {
   const [sport, setSport] = useState<string>('');
   const [searchResults, setSearchResults] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const sports = ['Soccer', 'Basketball', 'Tennis', 'Baseball', 'Golf', 'Table Tennis'];
+  const [sports, setSports] = useState<Sport[]>([])
 
+  useEffect(() => {
+    const fetchSports = async () => {
+      try {
+        const response = await fetch(`${config.backendUrl}/api/sports`);
+        if (!response.ok) throw new Error('Failed to fetch sports');
+        const data = await response.json();
+        if (data.message === 'OK') {
+          setSports(data.data);
+        } else {
+          console.error('Failed to fetch sports data');
+        }
+      } catch (err) {
+        console.error('Error fetching sports:', err);
+      }
+    };
+
+    fetchSports();
+  }, []);
+
+  const handleSportChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setSport(e.target.value)
+  }
+
+  const getSportNameByID = (sportID: string) => {
+    const sport = sports.find((s) => s._id === sportID);
+    return sport ? sport.sport : '--';
+  }
+  const filterResultsByRating = (players: any[]) => {
+    return players.filter(player => {
+      const elo = player.elo || 0; // default to 0 if elo is not available
+      const isAboveMinRating = minRating !== '' ? elo >= minRating : true;
+      const isBelowMaxRating = maxRating !== '' ? elo <= maxRating : true;
+      return isAboveMinRating && isBelowMaxRating;
+    });
+  };
   const handleSearch = async () => {
     setIsLoading(true);
     try {
+      const where: Record<string, any> = {};
+      
+      if (firstName) where['firstName'] = firstName;
+      if (lastName) where['lastName'] = lastName;
+      if (gender) where['gender'] = gender;
+      if (sport) where ['sport'] = sport;
       const params = new URLSearchParams();
-      if (firstName) params.append('firstName', firstName);
-      if (lastName) params.append('lastName', lastName);
-      if (gender) params.append('gender', gender);
-      if (minRating !== '') params.append('minRating', minRating.toString());
-      if (maxRating !== '') params.append('maxRating', maxRating.toString());
-      if (sport) params.append('sport', sport);
-
+      params.append('where', JSON.stringify(where));
       const response = await fetch(`${config.backendUrl}/api/users?${params.toString()}`);
       const data = await response.json();
 
       if (data.message === 'OK') {
-        setSearchResults(data.data);
-        console.log(data.data)
+        const filteredPlayers = filterResultsByRating(data.data)
+        setSearchResults(filteredPlayers);
       } else {
         console.error('Failed to fetch players');
       }
@@ -84,10 +124,11 @@ const Players: React.FC = () => {
         <select
           className="search-dropdown"
           value={sport}
-          onChange={(e) => setSport(e.target.value)}
+          onChange={handleSportChange}
         >
+          <option value="">Select Sport</option>
           {sports.map((s) => (
-            <option value={s}>{s}</option>
+            <option value={s._id} key={s._id}>{s.sport}</option>
           ))}
         </select>
         <select
@@ -96,9 +137,9 @@ const Players: React.FC = () => {
           onChange={(e) => setGender(e.target.value)}
         >
           <option value="">Any Gender</option>
-          <option value="male">Male</option>
-          <option value="female">Female</option>
-          <option value="other">Other</option>
+          <option value="Male">Male</option>
+          <option value="Female">Female</option>
+          <option value="Other">Other</option>
         </select>
     
         <button className="search-button" onClick={handleSearch} disabled={isLoading}>
@@ -112,6 +153,7 @@ const Players: React.FC = () => {
               <li className="header-item">First Name</li>
               <li className="header-item">Last Name</li>
               <li className="header-item">Gender</li>
+              <li className="header-item">Sport</li>
               <li className="header-item">Rating</li>
               <li className="header-item">Actions</li>
             </ul>
@@ -120,7 +162,8 @@ const Players: React.FC = () => {
                 <li className="player-item">{player.firstName || '--'}</li>
                 <li className="player-item">{player.lastName || '--'}</li>
                 <li className="player-item">{player.gender || '--'}</li>
-                <li className="player-item">{player.rating ?? '--'}</li>
+                <li className="player-item">{getSportNameByID(player.sport)} </li>
+                <li className="player-item">{player.elo ?? '--'}</li>
                 <li className="player-item">
                   <button className="action-button">View Profile</button>
                 </li>

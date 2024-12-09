@@ -3,7 +3,7 @@ import './Results.css';
 import config from '../../config';
 
 interface Sport {
-  id: string;
+  _id: string;
   sport: string;
 }
 
@@ -28,6 +28,7 @@ const Results: React.FC = () => {
   const [sport, setSport] = useState<string>('');
   const [startDate, setStartDate] = useState<string>('');
   const [endDate, setEndDate] = useState<string>('');
+
   const [results, setResults] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [sports, setSports] = useState<Sport[]>([])
@@ -50,18 +51,28 @@ const Results: React.FC = () => {
 
     fetchSports();
   }, []);
+
+  const handleSportChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setSport(e.target.value)
+    
+  }
+
   const handleSearch = async () => {
     setIsLoading(true);
-
+    
     try {
+      const where: Record<string, any> = {};
+
+      if (title) where['title'] = title;
+      if (city) where['City'] = city;
+      if (state) where['State'] = state;
+      if (country) where['Country'] = country;
+      if (sport) where['Sport'] = sport;
+      if (startDate) where['startDate'] = { $gte: startDate };  // Example: filter tournaments with startDate greater than or equal to the provided startDate
+      if (endDate) where['endDate'] = { $lte: endDate };  // Example: filter tournaments with endDate less than or equal to the provided endDate
+
       const params = new URLSearchParams();
-      if (title) params.append('title', title);
-      if (city) params.append('City', city);
-      if (state) params.append('State', state);
-      if (country) params.append('Country', country);
-      if (sport) params.append('Sport', sport);
-      if (startDate) params.append('startDate', startDate);
-      if (endDate) params.append('endDate', endDate);
+      params.append('where', JSON.stringify(where));
 
       const response = await fetch(`${config.backendUrl}/api/tournaments?${params.toString()}`);
       const data = await response.json();
@@ -123,11 +134,11 @@ const Results: React.FC = () => {
         <select
           className="search-dropdown"
           value={sport}
-          onChange={(e) => setSport(e.target.value)}
+          onChange={handleSportChange}
         >
           <option value="">Select Sport</option>
           {sports.map((s) => (
-            <option value={s.id} key ={s.id}>{s.sport}</option>
+            <option value={s._id} key ={s._id}>{s.sport}</option>
           ))}
         </select>
         <input
