@@ -88,7 +88,7 @@ const Players: React.FC = () => {
         </div>
         <div className="right-side">
           <p className="description">
-            Search for players by name, rating, sport, and gender. View profiles and meet the competition.
+            Search for players by name, rating, gender, and sport. View profiles and meet the competition.
           </p>
         </div>
       </div>
@@ -123,6 +123,7 @@ const Players: React.FC = () => {
         />
         <select
           className="search-dropdown"
+
           value={sport}
           onChange={handleSportChange}
         >
@@ -133,6 +134,7 @@ const Players: React.FC = () => {
         </select>
         <select
           className="search-dropdown"
+          
           value={gender}
           onChange={(e) => setGender(e.target.value)}
         >
@@ -141,6 +143,16 @@ const Players: React.FC = () => {
           <option value="Female">Female</option>
           <option value="Other">Other</option>
         </select>
+        <select
+          className="search-dropdown"
+          value={sport}
+          onChange={(e) => setSport(e.target.value)}
+        >
+          {sports.map((s) => (
+            <option value={s}>{s}</option>
+          ))}
+        </select>
+        
     
         <button className="search-button" onClick={handleSearch} disabled={isLoading}>
           {isLoading ? 'Searching...' : 'Search'}
