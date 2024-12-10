@@ -65,17 +65,14 @@ const Dashboard: React.FC = () => {
           <p className="player-rating">Your Current Rating is: {userRating || '--'}</p>
         </div>
       </div>
-      <div className="recent-matches-container">
-        {/* Header */}
-        <div className="data-header">
+      <div className="data-header">
           <div className="match-opponent">Opponent</div>
           <div className="match-rating">Opponent Rating</div>
           <div className="match-result">Result</div>
           <div className="match-rating-change">Rating Change</div>
           <div className="match-date">Date</div>
         </div>
-        {/* Scrollable Section */}
-        <div className="recent-matches-section">
+      <div className="recent-matches-section">
           {matches.map((match, index) => (
             <div className="tournament" key={index}>
               <div className="match-opponent">
@@ -88,7 +85,6 @@ const Dashboard: React.FC = () => {
             </div>
           ))}
         </div>
-      </div>
     </div>
   );
 };

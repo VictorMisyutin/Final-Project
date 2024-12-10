@@ -176,10 +176,11 @@ const Results: React.FC = () => {
             results.map((tournament, index) => (
               <div className="tournament-row" key={index}>
                 <div className="tournament-item">{tournament.title || '--'}</div>
-                <div className="tournament-item">{tournament.city || '--'}</div>
-                <div className="tournament-item">{tournament.state || '--'}</div>
-                <div className="tournament-item">{tournament.country || '--'}</div>
-                <div className="tournament-item">{tournament.sport || '--'}</div>
+                <div className="tournament-item">{tournament.City || '--'}</div>
+                <div className="tournament-item">{tournament.State || '--'}</div>
+                <div className="tournament-item">{tournament.Country || '--'}</div>
+                <div className="tournament-item">{tournament.Sport.sport || '--'}</div>
+
                 <div className="tournament-item">{new Date(tournament.startDate).toLocaleDateString() || '--'}</div>
                 <div className="tournament-item">{new Date(tournament.endDate).toLocaleDateString() || '--'}</div>
               </div>

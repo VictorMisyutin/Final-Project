@@ -37,8 +37,8 @@
         border-radius: 8px;
         overflow: hidden; /* Ensures rounded corners don't affect the scrollable area */
       }
-      
-    .data-header {
+    
+     .data-header {
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -79,22 +79,28 @@
     }
 
     .match-opponent, .match-rating, .match-result, .match-rating-change, .match-date {
-        flex: 1;
+        width: 20%;
         text-align: center;
     }
-    
+
+    .match-result {
+        border-radius: 10px;
+        padding: 5px 0px;
+        width: 60px;
+    }
+
     .match-result.win {
         background-color: rgb(26, 161, 26);
     }
-    
+
     .match-result.loss {
         background-color: rgb(183, 3, 3);
     }
-    
+
     .match-rating-change.positive {
         color: rgb(26, 161, 26);
     }
-    
+
     .match-rating-change.negative {
         color: rgb(183, 3, 3);
     }
@@ -102,5 +108,4 @@
     .match:nth-child(even) {
         background-color: #a3a3a3;
     }
-
-}
+};
