@@ -20,10 +20,10 @@ interface Tournament {
 const AddMatch: React.FC = () => {
   const [players, setPlayers] = useState<User[]>([]);
   const [tournaments, setTournaments] = useState<Tournament[]>([]);
-  const [playerOneId, setPlayerOneId] = useState<string>('');
-  const [playerTwoId, setPlayerTwoId] = useState<string>('');
-  const [playerOneBirthYear, setPlayerOneBirthYear] = useState<string>('');
-  const [playerTwoBirthYear, setPlayerTwoBirthYear] = useState<string>('');
+  const [winnerId, setWinnerId] = useState<string>('');
+  const [loserId, setLoserId] = useState<string>('');
+  const [winnerBirthYear, setWinnerBirthYear] = useState<string>('');
+  const [loserBirthYear, setLoserBirthYear] = useState<string>('');
   const [tournamentId, setTournamentId] = useState<string>('');
   const [startDate, setStartDate] = useState<string>('');
   const [message, setMessage] = useState<string>('');
@@ -55,47 +55,45 @@ const AddMatch: React.FC = () => {
   }, []);
 
   const getBirthYearByID = (playerID: string) => {
-    const player = players.find((p) => p._id === playerID)
-    return player ? player.dateOfBirth.substring(0,4) : null;
-  }
+    const player = players.find((p) => p._id === playerID);
+    return player ? player.dateOfBirth.substring(0, 4) : null;
+  };
 
   const getRatingByID = (playerID: string) => {
-    const player = players.find((p) => p._id === playerID)
+    const player = players.find((p) => p._id === playerID);
     return player ? player.elo : null;
-  }
-
+  };
 
   const handleAddMatch = async () => {
-    if (!playerOneId || !playerTwoId || !playerOneBirthYear || !playerTwoBirthYear || !tournamentId || !startDate) {
+    if (!winnerId || !loserId || !winnerBirthYear || !loserBirthYear || !tournamentId || !startDate) {
       setMessage('Please fill in all fields');
       return;
     }
 
-    if (getBirthYearByID(playerOneId) !== playerOneBirthYear.trim() || getBirthYearByID(playerTwoId) !== playerTwoBirthYear.trim()) {
+    if (getBirthYearByID(winnerId) !== winnerBirthYear.trim() || getBirthYearByID(loserId) !== loserBirthYear.trim()) {
       setMessage('Incorrect birth year field(s)');
       return;
     }
 
-    let r1 = getRatingByID(playerOneId);
-    let r2 = getRatingByID(playerTwoId);
+    let r1 = getRatingByID(winnerId);
+    let r2 = getRatingByID(loserId);
     if (!r1 || !r2) {
       setMessage('Internal Error');
       return;
     }
-    let e1 = 1/(1+10**((r2-r1)/400))
-    let e2 = 1/(1+10**((r1-r2)/400))
-    // NEW RATINGS FOR PLAYERS 1/2
-    
-    let updatep1 = 32 * (1-e1)
-    let updatep2 = 32 * (0-e2)
-    
-    let newr1 = r1 + updatep1
-    let newr2 = r2 + updatep2
 
-    
+    let e1 = 1 / (1 + 10 ** ((r2 - r1) / 400));
+    let e2 = 1 / (1 + 10 ** ((r1 - r2) / 400));
 
-    if (playerOneId === playerTwoId) {
-      setMessage('Player 1 and Player 2 cannot be the same');
+    // NEW RATINGS FOR WINNER AND LOSER
+    let updatep1 = 32 * (1 - e1);
+    let updatep2 = 32 * (0 - e2);
+
+    let newr1 = r1 + updatep1;
+    let newr2 = r2 + updatep2;
+
+    if (winnerId === loserId) {
+      setMessage('Winner and Loser cannot be the same');
       return;
     }
 
@@ -107,8 +105,8 @@ const AddMatch: React.FC = () => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          playerOneId,
-          playerTwoId,
+          winnerId,
+          loserId,
           tournamentId,
           startDate: new Date(startDate).toISOString(),
         }),
@@ -118,8 +116,8 @@ const AddMatch: React.FC = () => {
 
       if (data.message === 'Match created') {
         setMessage('Match added successfully');
-        setPlayerOneId('');
-        setPlayerTwoId('');
+        setWinnerId('');
+        setLoserId('');
         setTournamentId('');
         setStartDate('');
       } else {
@@ -140,11 +138,11 @@ const AddMatch: React.FC = () => {
         <div className="form-group">
           <label>Winner</label>
           <select
-            value={playerOneId}
-            onChange={(e) => setPlayerOneId(e.target.value)}
+            value={winnerId}
+            onChange={(e) => setWinnerId(e.target.value)}
             required
           >
-            <option value="">Select Player 1</option>
+            <option value="">Select Winner</option>
             {players.map((player) => (
               <option key={player._id} value={player._id}>
                 {player.firstName} {player.lastName}
@@ -153,22 +151,22 @@ const AddMatch: React.FC = () => {
           </select>
           <label>Birth Year</label>
           <input
-            type='text'
-            value={playerOneBirthYear}
-            onChange={(e) => setPlayerOneBirthYear(e.target.value)}
-            placeholder='YYYY'
-            required>
-          </input>
+            type="text"
+            value={winnerBirthYear}
+            onChange={(e) => setWinnerBirthYear(e.target.value)}
+            placeholder="YYYY"
+            required
+          />
         </div>
 
         <div className="form-group">
-          <label>Opponent</label>
+          <label>Loser</label>
           <select
-            value={playerTwoId}
-            onChange={(e) => setPlayerTwoId(e.target.value)}
+            value={loserId}
+            onChange={(e) => setLoserId(e.target.value)}
             required
           >
-            <option value="">Select Player 2</option>
+            <option value="">Select Loser</option>
             {players.map((player) => (
               <option key={player._id} value={player._id}>
                 {player.firstName} {player.lastName}
@@ -177,12 +175,12 @@ const AddMatch: React.FC = () => {
           </select>
           <label>Birth Year</label>
           <input
-            type='text'
-            value={playerTwoBirthYear}
-            onChange={(e) => setPlayerTwoBirthYear(e.target.value)}
-            placeholder='YYYY'
-            required>
-          </input>
+            type="text"
+            value={loserBirthYear}
+            onChange={(e) => setLoserBirthYear(e.target.value)}
+            placeholder="YYYY"
+            required
+          />
         </div>
 
         <div className="form-group">

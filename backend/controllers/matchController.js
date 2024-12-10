@@ -6,23 +6,23 @@ const Sport = require('../models/sport');
 
 
 exports.createMatch = (req, res) => {
-    const { playerOneId, playerTwoId, tournamentId, startDate, endDate, winnerId } = req.body;
+    const { winnerId, loserId, tournamentId, startDate, endDate } = req.body;
 
-    if (!playerOneId || !playerTwoId || !tournamentId || !winnerId) {
+    if (!winnerId || !loserId || !tournamentId) {
         return res.status(400).json({ message: 'Player IDs, Winner ID, and Tournament ID are required' });
     }
 
-    if (playerOneId === playerTwoId) {
+    if (winnerId === loserId) {
         return res.status(400).json({ message: 'Player 1 and Player 2 cannot be the same' });
     }
 
-    Promise.all([
-        User.findById(playerOneId),
-        User.findById(playerTwoId),
+    Promise.all([ 
+        User.findById(winnerId),
+        User.findById(loserId),
         Tournament.findById(tournamentId)
     ])
-    .then(([playerOne, playerTwo, tournament]) => {
-        if (!playerOne || !playerTwo) {
+    .then(([winnerId, loserId, tournament]) => {
+        if (!winnerId || !loserId) {
             return res.status(404).json({ message: 'Player not found' });
         }
         if (!tournament) {
@@ -34,13 +34,12 @@ exports.createMatch = (req, res) => {
         }
 
         const newMatch = new Match({
-            playerOne: playerOneId,
-            playerTwo: playerTwoId,
+            winner: winnerId,
+            loser: loserId,
             TournamentId: tournamentId,
             startDate: new Date(startDate),
             endDate: endDate ? new Date(endDate) : null,
-            Winner: winnerId, 
-            RatingChangeForWinner: 0, 
+            RatingChangeForWinner: 0
         });
 
         return newMatch.save();
@@ -51,12 +50,13 @@ exports.createMatch = (req, res) => {
 
 
 
+
 // Get all matches in a tournament
 exports.getMatchesByTournament = (req, res) => {
     const tournamentId = req.params.tournamentId;
 
     Match.find({ TournamentId: tournamentId })
-        .populate('playerOne playerTwo', 'firstName lastName elo') 
+        .populate('winner loser', 'firstName lastName elo') 
         .populate('TournamentId', 'title Sport') 
         .then(matches => res.json({ message: 'OK', data: matches }))
         .catch(err => res.status(500).json({ message: 'Error fetching matches', data: err }));
@@ -70,11 +70,10 @@ exports.getRecentMatchesByUser = (req, res) => {
         return res.status(400).json({ message: 'User ID is required' });
     }
 
-    Match.find({ $or: [{ playerOne: userId }, { playerTwo: userId }] })
+    Match.find({ $or: [{ winner: userId }, { loser: userId }] })
         .sort({ startDate: -1 })
         .limit(6)
-        .populate('playerOne', 'firstName lastName elo')  
-        .populate('playerTwo', 'firstName lastName elo')
+        .populate('winner loser', 'firstName lastName elo')  
         .populate('TournamentId', 'title Sport')
         .then(matches => {
             if (matches.length === 0) {
@@ -82,25 +81,22 @@ exports.getRecentMatchesByUser = (req, res) => {
             }
 
             const recentMatches = matches.map(match => {
-                if (!match.playerOne || !match.playerTwo) {
+                if (!match.winner || !match.loser) {
                     console.error('Missing player data in match:', match);
                     return null;
                 }
 
-                const isPlayerOne = match.playerOne._id.toString() === userId;
-                const opponent = isPlayerOne ? match.playerTwo : match.playerOne;
+                const isWinner = match.winner._id.toString() === userId;
+                const opponent = isWinner ? match.loser : match.winner;
 
                 const opponentName = opponent ? `${opponent.firstName} ${opponent.lastName}` : 'Unknown';
-                let calculatedResult = ""; 
-                if (match.winnezr == userId)
-                    calculatedResult = "Win"; 
-                else
-                calculatedResult = "Lose"
+                const calculatedResult = isWinner ? "Win" : "Lose";
+
                 return {
                     opponent: opponentName, 
                     opponent_rating: opponent.elo,
                     result: calculatedResult,
-                    rating_change: match.ratingChange,
+                    rating_change: match.RatingChangeForWinner,
                     tournament: match.TournamentId.title,
                     sport: match.TournamentId.Sport.sport, 
                     start_date: match.startDate
@@ -114,6 +110,7 @@ exports.getRecentMatchesByUser = (req, res) => {
             res.status(500).json({ message: 'Error fetching matches', data: err });
         });
 };
+
 
 
 // Get a match by ID
@@ -135,19 +132,23 @@ exports.updateMatch = (req, res) => {
     const matchId = req.params.matchId;
     const { endDate, winnerId, ratingChange } = req.body;
 
-    if (!endDate && !winnerId) {
+    if (!endDate || !winnerId) {
         return res.status(400).json({ message: 'End date and winner are required to update' });
     }
 
-    Match.findByIdAndUpdate(matchId, { endDate, Winner: winnerId, RatingChangeForWinner: ratingChange }, { new: true, runValidators: true })
+    Match.findByIdAndUpdate(matchId, { endDate, winner: winnerId, RatingChangeForWinner: ratingChange }, { new: true, runValidators: true })
         .then(updatedMatch => {
             if (!updatedMatch) {
                 return res.status(404).json({ message: 'Match not found' });
             }
+            const loserId = (winnerId === updatedMatch.winner.toString()) ? updatedMatch.loser : updatedMatch.winner;
+            updatedMatch.loser = loserId;
+
             res.json({ message: 'Match updated successfully', data: updatedMatch });
         })
         .catch(err => res.status(500).json({ message: 'Error updating match', data: err }));
 };
+
 
 // Delete a match
 exports.deleteMatch = (req, res) => {
