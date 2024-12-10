@@ -22,30 +22,51 @@
         }
     }
     
-    .recent-matches-section {
+    .recent-matches-container {
+        width: 80%;
+        margin: 75px auto;
         display: flex;
         flex-direction: column;
-        background-color: #dddddd;
-        padding: 20px;
+        background-color: #f4f4f4;
         border-radius: 8px;
-        width: 80%;
-        min-height: 300px;
-        margin: 75px auto;
-    }
-    
-    .data-header, .match {
+        overflow: hidden; /* Ensures rounded corners don't affect the scrollable area */
+      }
+      
+    .data-header {
         display: flex;
         justify-content: space-between;
         align-items: center;
         padding: 10px;
-    }
-
-    .data-header {
         background-color: #f4f4f4;
         font-weight: bold;
-        margin-bottom: 10px;
-        border-radius: 5px;
-    }
+        border-radius: 8px 8px 0 0; /* Rounded top corners */
+        z-index: 1;
+      }
+      
+    .recent-matches-section {
+        display: flex;
+        flex-direction: column;
+        background-color: #dddddd;
+        padding: 10px;
+        height: 300px; /* Fixed height for scrollable area */
+        overflow-y: auto; /* Enable vertical scrolling */
+        scrollbar-width: thin; /* Thin scrollbar for Firefox */
+        scrollbar-color: #888 #ddd; /* Custom scrollbar colors */
+      }
+      
+    .recent-matches-section::-webkit-scrollbar {
+        width: 10px; /* Width of the scrollbar */
+      }
+      
+    .recent-matches-section::-webkit-scrollbar-thumb {
+        background: #888; /* Scrollbar thumb color */
+        border-radius: 5px; /* Rounded scrollbar thumb */
+      }
+      
+    .recent-matches-section::-webkit-scrollbar-thumb:hover {
+        background: #555; /* Darker scrollbar thumb when hovered */
+      }
+      
 
     .match {
         background-color: #c5c5c5;

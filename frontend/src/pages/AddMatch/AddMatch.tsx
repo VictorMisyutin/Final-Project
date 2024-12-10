@@ -18,8 +18,8 @@ interface Tournament {
 const AddMatch: React.FC = () => {
   const [players, setPlayers] = useState<User[]>([]);
   const [tournaments, setTournaments] = useState<Tournament[]>([]);
-  const [playerOneId, setPlayerOneId] = useState<string>('');
-  const [playerTwoId, setPlayerTwoId] = useState<string>('');
+  const [winnerId, setWinnerId] = useState<string>(''); // New Winner field
+  const [loserId, setLoserId] = useState<string>(''); // Loser field
   const [tournamentId, setTournamentId] = useState<string>('');
   const [startDate, setStartDate] = useState<string>('');
   const [message, setMessage] = useState<string>('');
@@ -51,16 +51,26 @@ const AddMatch: React.FC = () => {
   }, []);
 
   const handleAddMatch = async () => {
-    if (!playerOneId || !playerTwoId || !tournamentId || !startDate) {
+    if (!winnerId || !loserId || !tournamentId || !startDate) {
       setMessage('Please fill in all fields');
       return;
     }
-
-    if (playerOneId === playerTwoId) {
-      setMessage('Player 1 and Player 2 cannot be the same');
+  
+    if (winnerId === loserId) {
+      setMessage('Winner and Loser cannot be the same player');
       return;
     }
-
+  
+    const matchData = {
+      playerOneId: winnerId, // Winner
+      playerTwoId: loserId,  // Loser
+      tournamentId,
+      startDate: new Date(startDate).toISOString(),
+      winnerId: winnerId, // Explicit Winner field
+    };
+  
+    console.log('Match Data:', matchData); // Debugging
+  
     setLoading(true);
     try {
       const response = await fetch(config.backendUrl + '/api/matches', {
@@ -68,24 +78,19 @@ const AddMatch: React.FC = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          playerOneId,
-          playerTwoId,
-          tournamentId,
-          startDate: new Date(startDate).toISOString(),
-        }),
+        body: JSON.stringify(matchData),
       });
-
+  
       const data = await response.json();
-
+  
       if (data.message === 'Match created') {
         setMessage('Match added successfully');
-        setPlayerOneId('');
-        setPlayerTwoId('');
+        setWinnerId('');
+        setLoserId('');
         setTournamentId('');
         setStartDate('');
       } else {
-        setMessage('Error creating match');
+        setMessage(data.message || 'Error creating match');
       }
     } catch (error) {
       setMessage('Error creating match');
@@ -97,16 +102,17 @@ const AddMatch: React.FC = () => {
 
   return (
     <div className="add-match-container">
-      <h2>Add New Match</h2>
+      <h2>Submit Match Result</h2>
       <form onSubmit={(e) => e.preventDefault()}>
+        {/* Winner Selection */}
         <div className="form-group">
-          <label>Player 1</label>
+          <label>Winner</label>
           <select
-            value={playerOneId}
-            onChange={(e) => setPlayerOneId(e.target.value)}
+            value={winnerId}
+            onChange={(e) => setWinnerId(e.target.value)}
             required
           >
-            <option value="">Select Player 1</option>
+            <option value="">Select Winner</option>
             {players.map((player) => (
               <option key={player._id} value={player._id}>
                 {player.firstName} {player.lastName}
@@ -115,14 +121,15 @@ const AddMatch: React.FC = () => {
           </select>
         </div>
 
+        {/* Loser Selection */}
         <div className="form-group">
-          <label>Player 2</label>
+          <label>Loser</label>
           <select
-            value={playerTwoId}
-            onChange={(e) => setPlayerTwoId(e.target.value)}
+            value={loserId}
+            onChange={(e) => setLoserId(e.target.value)}
             required
           >
-            <option value="">Select Player 2</option>
+            <option value="">Select Loser</option>
             {players.map((player) => (
               <option key={player._id} value={player._id}>
                 {player.firstName} {player.lastName}
@@ -131,6 +138,7 @@ const AddMatch: React.FC = () => {
           </select>
         </div>
 
+        {/* Tournament Selection */}
         <div className="form-group">
           <label>Tournament</label>
           <select
@@ -147,8 +155,9 @@ const AddMatch: React.FC = () => {
           </select>
         </div>
 
+        {/* Match Start Date */}
         <div className="form-group">
-          <label>Start Date</label>
+          <label>Match Date & Time</label>
           <input
             type="datetime-local"
             value={startDate}
@@ -157,15 +166,17 @@ const AddMatch: React.FC = () => {
           />
         </div>
 
+        {/* Submit Button */}
         <button
           type="button"
           onClick={handleAddMatch}
           disabled={loading}
         >
-          {loading ? 'Creating Match...' : 'Add Match'}
+          {loading ? 'Submitting...' : 'Add Match'}
         </button>
       </form>
 
+      {/* Message Display */}
       {message && <p className="message">{message}</p>}
     </div>
   );

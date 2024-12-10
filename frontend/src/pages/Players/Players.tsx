@@ -16,7 +16,7 @@ const Players: React.FC = () => {
   const [sport, setSport] = useState<string>('');
   const [searchResults, setSearchResults] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [sports, setSports] = useState<Sport[]>([])
+  const [sports, setSports] = useState<Sport[]>([]);
 
   useEffect(() => {
     const fetchSports = async () => {
@@ -38,37 +38,36 @@ const Players: React.FC = () => {
   }, []);
 
   const handleSportChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setSport(e.target.value)
-  }
+    setSport(e.target.value);
+  };
 
   const getSportNameByID = (sportID: string) => {
-    const sportName = sports.find((s) => s._id === sportID[0]);
+    const sportName = sports.find((s) => s._id === sportID);
     return sportName ? sportName.sport : '--';
-  }
-  const filterResultsByRating = (players: any[]) => {
-    return players.filter(player => {
-      const elo = player.elo || 0;
-      const isAboveMinRating = minRating !== '' ? elo >= minRating : true;
-      const isBelowMaxRating = maxRating !== '' ? elo <= maxRating : true;
-      return isAboveMinRating && isBelowMaxRating;
-    });
   };
+
   const handleSearch = async () => {
     setIsLoading(true);
     try {
       const where: Record<string, any> = {};
-      
+
       if (firstName) where['firstName'] = firstName;
       if (lastName) where['lastName'] = lastName;
       if (gender) where['gender'] = gender;
-      if (sport) where ['sport'] = sport;
+      if (sport) where['sport'] = sport;
+
       const params = new URLSearchParams();
       params.append('where', JSON.stringify(where));
       const response = await fetch(`${config.backendUrl}/api/users?${params.toString()}`);
       const data = await response.json();
 
       if (data.message === 'OK') {
-        const filteredPlayers = filterResultsByRating(data.data)
+        const filteredPlayers = data.data.filter((player: any) => {
+          const elo = player.elo || 0;
+          const isAboveMinRating = minRating !== '' ? elo >= minRating : true;
+          const isBelowMaxRating = maxRating !== '' ? elo <= maxRating : true;
+          return isAboveMinRating && isBelowMaxRating;
+        });
         setSearchResults(filteredPlayers);
       } else {
         console.error('Failed to fetch players');
@@ -123,18 +122,6 @@ const Players: React.FC = () => {
         />
         <select
           className="search-dropdown"
-
-          value={sport}
-          onChange={handleSportChange}
-        >
-          <option value="">Select Sport</option>
-          {sports.map((s) => (
-            <option value={s._id} key={s._id}>{s.sport}</option>
-          ))}
-        </select>
-        <select
-          className="search-dropdown"
-          
           value={gender}
           onChange={(e) => setGender(e.target.value)}
         >
@@ -146,46 +133,48 @@ const Players: React.FC = () => {
         <select
           className="search-dropdown"
           value={sport}
-          onChange={(e) => setSport(e.target.value)}
+          onChange={handleSportChange}
         >
+          <option value="">Select Sport</option>
           {sports.map((s) => (
-            <option value={s}>{s}</option>
+            <option value={s._id} key={s._id}>{s.sport}</option>
           ))}
         </select>
-        
-    
         <button className="search-button" onClick={handleSearch} disabled={isLoading}>
           {isLoading ? 'Searching...' : 'Search'}
         </button>
       </div>
-      <div className="results-section">
-        {searchResults.length > 0 ? (
-          <>
-            <ul className="data-header">
-              <li className="header-item">First Name</li>
-              <li className="header-item">Last Name</li>
-              <li className="header-item">Gender</li>
-              <li className="header-item">Sport</li>
-              <li className="header-item">Rating</li>
-              <li className="header-item">Actions</li>
-            </ul>
-            {searchResults.map((player, index) => (
-              <ul className="player-row" key={index}>
-                <li className="player-item">{player.firstName || '--'}</li>
-                <li className="player-item">{player.lastName || '--'}</li>
-                <li className="player-item">{player.gender || '--'}</li>
-                <li className="player-item">{getSportNameByID(player.sport)} </li>
-                <li className="player-item">{player.elo ?? '--'}</li>
-                <li className="player-item">
+      <div className="results-section-container">
+        {/* Data Header */}
+        <div className="data-header">
+          <div className="header-item">First Name</div>
+          <div className="header-item">Last Name</div>
+          <div className="header-item">Gender</div>
+          <div className="header-item">Sport</div>
+          <div className="header-item">Rating</div>
+          <div className="header-item">Actions</div>
+        </div>
+        {/* Scrollable Results Section */}
+        <div className="results-section">
+          {searchResults.length > 0 ? (
+            searchResults.map((player, index) => (
+              <div className="player-row" key={index}>
+                <div className="player-item">{player.firstName || '--'}</div>
+                <div className="player-item">{player.lastName || '--'}</div>
+                <div className="player-item">{player.gender || '--'}</div>
+                <div className="player-item">{getSportNameByID(player.sport)}</div>
+                <div className="player-item">{player.elo ?? '--'}</div>
+                <div className="player-item">
                   <button className="action-button">View Profile</button>
-                </li>
-              </ul>
-            ))}
-          </>
-        ) : (
-          <p className="no-results">{isLoading ? '' : 'No players found. Try different filters.'}</p>
-        )}
+                </div>
+              </div>
+            ))
+          ) : (
+            <p className="no-results">No players found. Try different filters.</p>
+          )}
+        </div>
       </div>
+
     </div>
   );
 };

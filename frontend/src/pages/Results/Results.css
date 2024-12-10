@@ -33,16 +33,53 @@
   }
 }
 
-.tournament-results-section {
+.results-section-container {
+  width: calc(100% - 20px); /* Match the width of search filters */
+  max-width: 1600px; /* Same max width as search filters */
+  margin: 20px auto; /* Center horizontally and add vertical spacing */
+  display: flex;
+  flex-direction: column;
+  background-color: #f4f4f4;
+  border-radius: 8px;
+  overflow: hidden; /* Ensures rounded corners */
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1); /* Optional for better appearance */
+}
+
+.data-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  background-color: #f4f4f4;
+  font-weight: bold;
+  border-radius: 8px 8px 0 0; /* Rounded top corners */
+  z-index: 1;
+}
+
+.results-section {
   display: flex;
   flex-direction: column;
   background-color: #dddddd;
-  padding: 20px;
-  border-radius: 8px;
-  width: 80%;
-  min-height: 300px;
-  margin: 75px auto;
+  padding: 10px;
+  height: 300px; /* Fixed height for scrollable section */
+  overflow-y: auto; /* Enable vertical scrolling */
+  scrollbar-width: thin; /* Thin scrollbar for Firefox */
+  scrollbar-color: #888 #ddd; /* Custom scrollbar colors */
 }
+
+.results-section::-webkit-scrollbar {
+  width: 10px; /* Scrollbar width */
+}
+
+.results-section::-webkit-scrollbar-thumb {
+  background: #888; /* Scrollbar thumb color */
+  border-radius: 5px; /* Rounded scrollbar thumb */
+}
+
+.results-section::-webkit-scrollbar-thumb:hover {
+  background: #555; /* Darker scrollbar thumb on hover */
+}
+
 .tournament-row {
   display: flex;
   padding: 10px 0;
