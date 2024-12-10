@@ -6,10 +6,14 @@ const Sport = require('../models/sport');
 
 
 exports.createMatch = (req, res) => {
-    const { playerOneId, playerTwoId, tournamentId, startDate, endDate } = req.body;
+    const { playerOneId, playerTwoId, tournamentId, startDate, endDate, winnerId } = req.body;
 
-    if (!playerOneId || !playerTwoId || !tournamentId) {
-        return res.status(400).json({ message: 'Player IDs and Tournament ID are required' });
+    if (!playerOneId || !playerTwoId || !tournamentId || !winnerId) {
+        return res.status(400).json({ message: 'Player IDs, Winner ID, and Tournament ID are required' });
+    }
+
+    if (playerOneId === playerTwoId) {
+        return res.status(400).json({ message: 'Player 1 and Player 2 cannot be the same' });
     }
 
     Promise.all([
@@ -35,8 +39,8 @@ exports.createMatch = (req, res) => {
             TournamentId: tournamentId,
             startDate: new Date(startDate),
             endDate: endDate ? new Date(endDate) : null,
-            Winner: null,
-            RatingChangeForWinner: 0,
+            Winner: winnerId, 
+            RatingChangeForWinner: 0, 
         });
 
         return newMatch.save();

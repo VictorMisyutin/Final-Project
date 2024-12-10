@@ -180,6 +180,7 @@ const Results: React.FC = () => {
                 <div className="tournament-item">{tournament.State || '--'}</div>
                 <div className="tournament-item">{tournament.Country || '--'}</div>
                 <div className="tournament-item">{tournament.Sport.sport || '--'}</div>
+
                 <div className="tournament-item">{new Date(tournament.startDate).toLocaleDateString() || '--'}</div>
                 <div className="tournament-item">{new Date(tournament.endDate).toLocaleDateString() || '--'}</div>
               </div>

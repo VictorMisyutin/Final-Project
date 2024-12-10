@@ -38,7 +38,7 @@
         overflow: hidden; /* Ensures rounded corners don't affect the scrollable area */
       }
     
-      .data-header {
+     .data-header {
         display: flex;
         justify-content: space-between;
         align-items: center;

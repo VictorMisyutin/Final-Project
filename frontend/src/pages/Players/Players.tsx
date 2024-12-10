@@ -17,7 +17,7 @@ const Players: React.FC = () => {
   const [sport, setSport] = useState<string>('');
   const [searchResults, setSearchResults] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [sports, setSports] = useState<Sport[]>([])
+  const [sports, setSports] = useState<Sport[]>([]);
 
   useEffect(() => {
     const fetchSports = async () => {
@@ -38,34 +38,37 @@ const Players: React.FC = () => {
     fetchSports();
   }, []);
 
-  const getSportNameByID = (sportID: string) => {
-    const sportName = sports.find((s) => s._id === sportID[0]);
-    return sportName ? sportName.sport : '--';
-  }
-  const filterResultsByRating = (players: any[]) => {
-    return players.filter(player => {
-      const elo = player.elo || 0;
-      const isAboveMinRating = minRating !== '' ? elo >= minRating : true;
-      const isBelowMaxRating = maxRating !== '' ? elo <= maxRating : true;
-      return isAboveMinRating && isBelowMaxRating;
-    });
+  const handleSportChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setSport(e.target.value);
   };
+
+  const getSportNameByID = (sportID: string) => {
+    const sportName = sports.find((s) => s._id === sportID);
+    return sportName ? sportName.sport : '--';
+  };
+
   const handleSearch = async () => {
     setIsLoading(true);
     try {
       const where: Record<string, any> = {};
-      
+
       if (firstName) where['firstName'] = firstName;
       if (lastName) where['lastName'] = lastName;
       if (gender) where['gender'] = gender;
-      if (sport) where ['sport'] = sport;
+      if (sport) where['sport'] = sport;
+
       const params = new URLSearchParams();
       params.append('where', JSON.stringify(where));
       const response = await fetch(`${config.backendUrl}/api/users?${params.toString()}`);
       const data = await response.json();
 
       if (data.message === 'OK') {
-        const filteredPlayers = filterResultsByRating(data.data)
+        const filteredPlayers = data.data.filter((player: any) => {
+          const elo = player.elo || 0;
+          const isAboveMinRating = minRating !== '' ? elo >= minRating : true;
+          const isBelowMaxRating = maxRating !== '' ? elo <= maxRating : true;
+          return isAboveMinRating && isBelowMaxRating;
+        });
         setSearchResults(filteredPlayers);
       } else {
         console.error('Failed to fetch players');
@@ -132,15 +135,13 @@ const Players: React.FC = () => {
         <select
           className="search-dropdown"
           value={sport}
-          onChange={(e) => setSport(e.target.value)}
+          onChange={handleSportChange}
         >
           <option value=''>{'Select Sport'}</option>
           {sports.map((s) => (
             <option value={s._id}>{s.sport}</option>
           ))}
         </select>
-        
-    
         <button className="search-button" onClick={handleSearch} disabled={isLoading}>
           {isLoading ? 'Searching...' : 'Search'}
         </button>
@@ -175,6 +176,7 @@ const Players: React.FC = () => {
           )}
         </div>
       </div>
+
     </div>
   );
 };
