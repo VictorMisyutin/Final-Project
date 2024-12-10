@@ -1,4 +1,5 @@
 import React, { useState, useEffect} from 'react';
+import { Link } from 'react-router-dom';
 import './Results.css';
 import config from '../../config';
 
@@ -8,6 +9,7 @@ interface Sport {
 }
 
 interface Tournament {
+  _id: string;
   title: string;
   City: string;
   State: string;
@@ -169,6 +171,7 @@ const Results: React.FC = () => {
           <div className="header-item">Sport</div>
           <div className="header-item">Start Date</div>
           <div className="header-item">End Date</div>
+          <div className="header-item">Actions</div>
         </div>
         {/* Scrollable Results Section */}
         <div className="results-section">
@@ -183,6 +186,7 @@ const Results: React.FC = () => {
 
                 <div className="tournament-item">{new Date(tournament.startDate).toLocaleDateString() || '--'}</div>
                 <div className="tournament-item">{new Date(tournament.endDate).toLocaleDateString() || '--'}</div>
+                <div className="tournament-item"><Link to={`/tournament/${tournament._id}`} className="action-button">View Matches</Link></div>
               </div>
             ))
           ) : (

@@ -1,0 +1,114 @@
+.tournament-view-page-container{
+
+    .hero{
+        width: 100%;
+        display: flex;
+        background-color: transparent;
+        gap: 0;
+        margin: 0 auto;
+        .left-side{
+            display: block;
+            width: 50%;
+            text-align: center;
+            margin: auto;
+            h1{
+                font-size: 50px;
+            }
+        }
+        .right-side{
+            display: block;
+            width: 50%;
+            text-align: center;
+            margin: auto;
+            
+            
+            .player-welcome{
+                margin-bottom: 40px;
+            } 
+        }
+    }
+    
+    .recent-matches-section-container {
+        width: calc(100% - 20px); /* Matches other centered sections */
+        max-width: 1600px; /* Same max-width for consistency */
+        margin: 20px auto; /* Centers horizontally */
+        background-color: #f4f4f4;
+        border-radius: 8px;
+        overflow: hidden; /* Ensures rounded corners */
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .data-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px;
+        background-color: #f4f4f4;
+        font-weight: bold;
+        border-radius: 8px 8px 0 0; /* Rounded top corners */
+        z-index: 1;
+    }
+    
+    .recent-matches-section {
+        display: flex;
+        flex-direction: column;
+        background-color: #dddddd;
+        height: 300px; /* Fixed height for scrollable section */
+        overflow-y: auto; /* Enables vertical scrolling */
+        scrollbar-width: thin; /* Thin scrollbar for Firefox */
+        scrollbar-color: #888 #ddd; /* Custom scrollbar colors */
+    }
+    
+    .recent-matches-section::-webkit-scrollbar {
+        width: 10px; /* Scrollbar width */
+    }
+    
+    .recent-matches-section::-webkit-scrollbar-thumb {
+        background: #888; /* Scrollbar thumb color */
+        border-radius: 5px; /* Rounded scrollbar thumb */
+    }
+    
+    .recent-matches-section::-webkit-scrollbar-thumb:hover {
+        background: #555; /* Darker scrollbar thumb on hover */
+    }
+    
+    .match-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center; /* Center content vertically */
+        padding: 10px 0;
+        border-bottom: 1px solid #ccc;
+        background-color: #c5c5c5;
+    }
+
+    .match {
+        background-color: #c5c5c5;
+    }
+
+    .match-opponent, .match-rating, .match-result, .match-rating-change, .match-date {
+        flex: 1;
+        text-align: center;
+    }
+    
+    .match-result.win {
+        background-color: rgb(26, 161, 26);
+    }
+    
+    .match-result.loss {
+        background-color: rgb(183, 3, 3);
+    }
+    
+    .match-rating-change.positive {
+        color: rgb(26, 161, 26);
+    }
+    
+    .match-rating-change.negative {
+        color: rgb(183, 3, 3);
+    }
+
+    .match-row:nth-child(even) {
+        background-color: #a3a3a3;
+    }
+
+}

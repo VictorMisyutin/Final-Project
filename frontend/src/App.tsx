@@ -13,6 +13,7 @@ import AddMatch from './pages/AddMatch/AddMatch';
 import Players from './pages/Players/Players';
 import Results from './pages/Results/Results';
 import Profile from './pages/Profile/Profile';
+import TournamentView from './pages/TournamentView/TournamentView';
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
       <Route path="/players" element={<Players /> }/>
       <Route path="/results" element={<Results />}/>
       <Route path="/profile/:userid" element={<Profile />}/>
+      <Route path="/tournament/:tournamentid" element={<TournamentView />}/>
     </Routes>
     </>
   );
