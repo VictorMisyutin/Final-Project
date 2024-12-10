@@ -30,10 +30,10 @@ exports.getTournaments = (req, res) => {
 
 // Create a new tournament
 exports.createTournament = async (req, res) => {
-    const { title, City, State, Country, Sport, startDate, endDate } = req.body;
+    const { title, City, State, Country, Sport, startDate, endDate, password } = req.body;
 
-    if (!title || !City || !Country || !Sport) {
-        return res.status(400).json({ message: 'Title, City, Country, and Sport are required fields' });
+    if (!title || !City || !Country || !Sport || !password) {
+        return res.status(400).json({ message: 'Title, City, Country, Sport, and Password are required fields' });
     }
 
     try {
@@ -47,17 +47,40 @@ exports.createTournament = async (req, res) => {
             City,
             State,
             Country,
-            Sport, 
+            Sport,
             startDate,
             endDate,
+            password,
             dateCreated: Date.now(),
-            users: [] 
+            users: []
         });
 
         await newTournament.save();
         res.status(201).json({ message: 'Tournament created successfully', data: newTournament });
     } catch (err) {
         res.status(500).json({ message: 'Error creating tournament', data: err });
+    }
+};
+
+// check if tournament password is correct
+exports.verifyTournamentPassword = async (req, res) => {
+    const { tournamentId } = req.params;
+    const { password } = req.body;
+
+    try {
+        const tournament = await Tournament.findById(tournamentId);
+        if (!tournament) {
+            return res.status(404).json({ message: 'Tournament not found' });
+        }
+
+        const isMatch = await bcrypt.compare(password, tournament.password);
+        if (!isMatch) {
+            return res.status(400).json({ message: 'Invalid password' });
+        }
+
+        res.json({ message: 'Password verified successfully', data: {} });
+    } catch (err) {
+        res.status(500).json({ message: 'Error verifying password', data: err });
     }
 };
 
