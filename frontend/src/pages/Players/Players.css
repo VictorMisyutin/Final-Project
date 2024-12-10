@@ -104,6 +104,10 @@
   margin: 0;
 }
 
+.player-row {
+  background-color: #c5c5c5;
+}
+
 .player-row:nth-child(even) {
   background-color: #a3a3a3;
 }
@@ -112,12 +116,6 @@
 .player-item {
   flex: 1;
   text-align: center;
-}
-
-.action-button {
-  width: 100px;
-  margin: 0;
-  font-size: small;
 }
 
 .no-results {

@@ -38,10 +38,6 @@ const Players: React.FC = () => {
     fetchSports();
   }, []);
 
-  const handleSportChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setSport(e.target.value)
-  }
-
   const getSportNameByID = (sportID: string) => {
     const sportName = sports.find((s) => s._id === sportID[0]);
     return sportName ? sportName.sport : '--';
@@ -124,17 +120,6 @@ const Players: React.FC = () => {
         />
         <select
           className="search-dropdown"
-
-          value={sport}
-          onChange={handleSportChange}
-        >
-          <option value="">Select Sport</option>
-          {sports.map((s) => (
-            <option value={s._id} key={s._id}>{s.sport}</option>
-          ))}
-        </select>
-        <select
-          className="search-dropdown"
           
           value={gender}
           onChange={(e) => setGender(e.target.value)}
@@ -149,6 +134,7 @@ const Players: React.FC = () => {
           value={sport}
           onChange={(e) => setSport(e.target.value)}
         >
+          <option value=''>{'Select Sport'}</option>
           {sports.map((s) => (
             <option value={s._id}>{s.sport}</option>
           ))}

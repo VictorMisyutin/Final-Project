@@ -7,6 +7,7 @@ interface User {
   firstName: string;
   lastName: string;
   sport: string[];
+  elo: number;
   dateOfBirth: string;
 }
 
@@ -34,7 +35,6 @@ const AddMatch: React.FC = () => {
         const response = await fetch(config.backendUrl + '/api/users');
         const data = await response.json();
         setPlayers(data.data);
-        console.log(data.data)
       } catch (error) {
         console.error('Error fetching players:', error);
       }
@@ -59,6 +59,12 @@ const AddMatch: React.FC = () => {
     return player ? player.dateOfBirth.substring(0,4) : null;
   }
 
+  const getRatingByID = (playerID: string) => {
+    const player = players.find((p) => p._id === playerID)
+    return player ? player.elo : null;
+  }
+
+
   const handleAddMatch = async () => {
     if (!playerOneId || !playerTwoId || !playerOneBirthYear || !playerTwoBirthYear || !tournamentId || !startDate) {
       setMessage('Please fill in all fields');
@@ -70,8 +76,20 @@ const AddMatch: React.FC = () => {
       return;
     }
 
+    let r1 = getRatingByID(playerOneId);
+    let r2 = getRatingByID(playerTwoId);
+    if (!r1 || !r2) {
+      setMessage('Internal Error');
+      return;
+    }
+    let e1 = 1/(1+10**((r2-r1)/400))
+    let e2 = 1/(1+10**((r1-r2)/400))
+    // NEW RATINGS FOR PLAYERS 1/2
+    let newr1 = r1 + 32 * (1-e1)
+    let newr2 = r2 + 32 * (0-e2)
+
     
-    
+
     if (playerOneId === playerTwoId) {
       setMessage('Player 1 and Player 2 cannot be the same');
       return;
@@ -116,7 +134,7 @@ const AddMatch: React.FC = () => {
       <h2>Add New Match</h2>
       <form onSubmit={(e) => e.preventDefault()}>
         <div className="form-group">
-          <label>Player 1</label>
+          <label>Winner</label>
           <select
             value={playerOneId}
             onChange={(e) => setPlayerOneId(e.target.value)}
@@ -140,7 +158,7 @@ const AddMatch: React.FC = () => {
         </div>
 
         <div className="form-group">
-          <label>Player 2</label>
+          <label>Opponent</label>
           <select
             value={playerTwoId}
             onChange={(e) => setPlayerTwoId(e.target.value)}
@@ -180,7 +198,7 @@ const AddMatch: React.FC = () => {
         </div>
 
         <div className="form-group">
-          <label>Start Date</label>
+          <label>Date</label>
           <input
             type="datetime-local"
             value={startDate}
