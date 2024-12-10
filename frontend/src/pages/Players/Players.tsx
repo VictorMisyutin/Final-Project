@@ -145,33 +145,35 @@ const Players: React.FC = () => {
           {isLoading ? 'Searching...' : 'Search'}
         </button>
       </div>
-      <div className="results-section">
-        {searchResults.length > 0 ? (
-          <>
-            <ul className="data-header">
-              <li className="header-item">First Name</li>
-              <li className="header-item">Last Name</li>
-              <li className="header-item">Gender</li>
-              <li className="header-item">Sport</li>
-              <li className="header-item">Rating</li>
-              <li className="header-item">Actions</li>
-            </ul>
-            {searchResults.map((player, index) => (
-              <ul className="player-row" key={index}>
-                <li className="player-item">{player.firstName || '--'}</li>
-                <li className="player-item">{player.lastName || '--'}</li>
-                <li className="player-item">{player.gender || '--'}</li>
-                <li className="player-item">{getSportNameByID(player.sport)} </li>
-                <li className="player-item">{player.elo ?? '--'}</li>
-                <li className="player-item">
-                  <Link to={`/profile/${player._id}`} className="action-button">View Profile</Link>
-                </li>
-              </ul>
-            ))}
-          </>
-        ) : (
-          <p className="no-results">{isLoading ? '' : 'No players found. Try different filters.'}</p>
-        )}
+      <div className="results-section-container">
+        {/* Data Header */}
+        <div className="data-header">
+          <div className="header-item">First Name</div>
+          <div className="header-item">Last Name</div>
+          <div className="header-item">Gender</div>
+          <div className="header-item">Sport</div>
+          <div className="header-item">Rating</div>
+          <div className="header-item">Actions</div>
+        </div>
+        {/* Scrollable Results Section */}
+        <div className="results-section">
+          {searchResults.length > 0 ? (
+            searchResults.map((player, index) => (
+              <div className="player-row" key={index}>
+                <div className="player-item">{player.firstName || '--'}</div>
+                <div className="player-item">{player.lastName || '--'}</div>
+                <div className="player-item">{player.gender || '--'}</div>
+                <div className="player-item">{getSportNameByID(player.sport)}</div>
+                <div className="player-item">{player.elo ?? '--'}</div>
+                <div className="player-item">
+                  <button className="action-button">View Profile</button>
+                </div>
+              </div>
+            ))
+          ) : (
+            <p className="no-results">No players found. Try different filters.</p>
+          )}
+        </div>
       </div>
     </div>
   );

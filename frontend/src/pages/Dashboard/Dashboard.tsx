@@ -65,26 +65,26 @@ const Dashboard: React.FC = () => {
           <p className="player-rating">Your Current Rating is: {userRating || '--'}</p>
         </div>
       </div>
+      <div className="data-header">
+          <div className="match-opponent">Opponent</div>
+          <div className="match-rating">Opponent Rating</div>
+          <div className="match-result">Result</div>
+          <div className="match-rating-change">Rating Change</div>
+          <div className="match-date">Date</div>
+        </div>
       <div className="recent-matches-section">
-        <ul className="data-header">
-          <li className="match-opponent">Opponent</li>
-          <li className="match-rating">Opponent Rating</li>
-          <li className="match-result">Result</li>
-          <li className="match-rating-change">Rating Change</li>
-          <li className="match-date">Date</li>
-        </ul>
-        {matches.map((match, index) => (
-          <ul className="match" key={index}>
-            <li className="match-opponent">
-              {opponentNames[index] ?? '-'}
-            </li>
-            <li className="match-rating">{match.opponent_rating ?? '--'}</li>
-            <li className="match-result">{match.result ?? '--'}</li>
-            <li className="match-rating-change">{match.rating_change ?? '--'}</li>
-            <li className="match-date">{new Date(match.start_date ?? '--').toLocaleDateString()}</li>
-          </ul>
-        ))}
-      </div>
+          {matches.map((match, index) => (
+            <div className="tournament" key={index}>
+              <div className="match-opponent">
+                {opponentNames[index] ?? '-'}
+              </div>
+              <div className="match-rating">{match.opponent_rating ?? '--'}</div>
+              <div className="match-result">{match.result ?? '--'}</div>
+              <div className="match-rating-change">{match.rating_change ?? '--'}</div>
+              <div className="match-date">{new Date(match.start_date ?? '--').toLocaleDateString()}</div>
+            </div>
+          ))}
+        </div>
     </div>
   );
 };

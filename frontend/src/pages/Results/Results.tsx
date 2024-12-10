@@ -159,32 +159,35 @@ const Results: React.FC = () => {
           {isLoading ? 'Searching...' : 'Search'}
         </button>
       </div>
-      <div className="tournament-results-section">
-        {results.length > 0 ? (
-          <>
-            <ul className="data-header">
-              <li className="header-item">Title</li>
-              <li className="header-item">Location</li>
-              <li className="header-item">Dates</li>
-              <li className="header-item">Sport</li>
-            </ul>
-            {results.map((tournament, index) => (
-              <ul className="tournament-row" key={index}>
-                <li className="tournament-item">{tournament.title}</li>
-                <li className="tournament-item">
-                  {tournament.City}, {tournament.State}, {tournament.Country}
-                </li>
-                <li className="tournament-item">
-                  {new Date(tournament.startDate).toLocaleDateString()} -{' '}
-                  {new Date(tournament.endDate).toLocaleDateString()}
-                </li>
-                <li className="tournament-item">{tournament.Sport.sport}</li>
-              </ul>
-            ))}
-          </>
-        ) : (
-          <p className="no-results">{isLoading ? '' : 'No tournaments found. Try different filters.'}</p>
-        )}
+      <div className="results-section-container">
+        {/* Data Header */}
+        <div className="data-header">
+          <div className="header-item">Title</div>
+          <div className="header-item">City</div>
+          <div className="header-item">State</div>
+          <div className="header-item">Country</div>
+          <div className="header-item">Sport</div>
+          <div className="header-item">Start Date</div>
+          <div className="header-item">End Date</div>
+        </div>
+        {/* Scrollable Results Section */}
+        <div className="results-section">
+          {results.length > 0 ? (
+            results.map((tournament, index) => (
+              <div className="tournament-row" key={index}>
+                <div className="tournament-item">{tournament.title || '--'}</div>
+                <div className="tournament-item">{tournament.City || '--'}</div>
+                <div className="tournament-item">{tournament.State || '--'}</div>
+                <div className="tournament-item">{tournament.Country || '--'}</div>
+                <div className="tournament-item">{tournament.Sport.sport || '--'}</div>
+                <div className="tournament-item">{new Date(tournament.startDate).toLocaleDateString() || '--'}</div>
+                <div className="tournament-item">{new Date(tournament.endDate).toLocaleDateString() || '--'}</div>
+              </div>
+            ))
+          ) : (
+            <p className="no-results">No tournaments found. Try different filters.</p>
+          )}
+        </div>
       </div>
     </div>
   );
