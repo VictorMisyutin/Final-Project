@@ -12,6 +12,7 @@ import Dashboard from './pages/Dashboard/Dashboard';
 import AddMatch from './pages/AddMatch/AddMatch';
 import Players from './pages/Players/Players';
 import Results from './pages/Results/Results';
+import Profile from './pages/Profile/Profile';
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
       <Route path="/add-match" element={<ProtectedRoute><AddMatch /></ProtectedRoute>}/>
       <Route path="/players" element={<Players /> }/>
       <Route path="/results" element={<Results />}/>
+      <Route path="/profile/:userid" element={<Profile />}/>
     </Routes>
     </>
   );

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import './Players.css';
 import config from '../../config';
 
@@ -177,7 +178,7 @@ const Players: React.FC = () => {
                 <li className="player-item">{getSportNameByID(player.sport)} </li>
                 <li className="player-item">{player.elo ?? '--'}</li>
                 <li className="player-item">
-                  <button className="action-button">View Profile</button>
+                  <Link to={`/profile/${player._id}`} className="action-button">View Profile</Link>
                 </li>
               </ul>
             ))}
