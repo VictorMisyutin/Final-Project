@@ -38,6 +38,9 @@ router.route('/tournaments/:tournamentId/register')
 router.route('/tournaments/:tournamentId/unregister')
     .post(tournamentController.unregisterUserFromTournament);
 
+router.route('/tournaments/:tournamentId/verify-password')
+    .post(tournamentController.verifyTournamentPassword);
+
 // Match Routes
 router.route('/matches')
 .post(matchController.createMatch);
