@@ -7,6 +7,7 @@ interface User {
   firstName: string;
   lastName: string;
   sport: string[];
+  dateOfBirth: string;
 }
 
 interface Tournament {
@@ -20,6 +21,8 @@ const AddMatch: React.FC = () => {
   const [tournaments, setTournaments] = useState<Tournament[]>([]);
   const [playerOneId, setPlayerOneId] = useState<string>('');
   const [playerTwoId, setPlayerTwoId] = useState<string>('');
+  const [playerOneBirthYear, setPlayerOneBirthYear] = useState<string>('');
+  const [playerTwoBirthYear, setPlayerTwoBirthYear] = useState<string>('');
   const [tournamentId, setTournamentId] = useState<string>('');
   const [startDate, setStartDate] = useState<string>('');
   const [message, setMessage] = useState<string>('');
@@ -31,6 +34,7 @@ const AddMatch: React.FC = () => {
         const response = await fetch(config.backendUrl + '/api/users');
         const data = await response.json();
         setPlayers(data.data);
+        console.log(data.data)
       } catch (error) {
         console.error('Error fetching players:', error);
       }
@@ -50,12 +54,24 @@ const AddMatch: React.FC = () => {
     fetchTournaments();
   }, []);
 
+  const getBirthYearByID = (playerID: string) => {
+    const player = players.find((p) => p._id === playerID)
+    return player ? player.dateOfBirth.substring(0,4) : null;
+  }
+
   const handleAddMatch = async () => {
-    if (!playerOneId || !playerTwoId || !tournamentId || !startDate) {
+    if (!playerOneId || !playerTwoId || !playerOneBirthYear || !playerTwoBirthYear || !tournamentId || !startDate) {
       setMessage('Please fill in all fields');
       return;
     }
 
+    if (getBirthYearByID(playerOneId) !== playerOneBirthYear.trim() || getBirthYearByID(playerTwoId) !== playerTwoBirthYear.trim()) {
+      setMessage('Incorrect birth year field(s)');
+      return;
+    }
+
+    
+    
     if (playerOneId === playerTwoId) {
       setMessage('Player 1 and Player 2 cannot be the same');
       return;
@@ -113,6 +129,14 @@ const AddMatch: React.FC = () => {
               </option>
             ))}
           </select>
+          <label>Birth Year</label>
+          <input
+            type='text'
+            value={playerOneBirthYear}
+            onChange={(e) => setPlayerOneBirthYear(e.target.value)}
+            placeholder='YYYY'
+            required>
+          </input>
         </div>
 
         <div className="form-group">
@@ -129,6 +153,14 @@ const AddMatch: React.FC = () => {
               </option>
             ))}
           </select>
+          <label>Birth Year</label>
+          <input
+            type='text'
+            value={playerTwoBirthYear}
+            onChange={(e) => setPlayerTwoBirthYear(e.target.value)}
+            placeholder='YYYY'
+            required>
+          </input>
         </div>
 
         <div className="form-group">
