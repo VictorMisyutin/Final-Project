@@ -55,7 +55,7 @@ const Dashboard: React.FC = () => {
   }, [userId]);
 
   return (
-    <div className="page-container">
+    <div className="dashboard-page-container">
       <div className="hero">
         <div className="left-side">
           <h1>Dashboard</h1>

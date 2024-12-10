@@ -1,0 +1,79 @@
+.profile-page-container{
+
+    .hero{
+        width: 100%;
+        display: flex;
+        background-color: transparent;
+        gap: 0;
+        margin: 0 auto;
+        .left-side{
+            display: block;
+            width: 50%;
+            text-align: center;
+            margin: auto;
+            h1{
+                font-size: 50px;
+            }
+        }
+        .right-side{
+            display: block;
+            width: 50%;
+            text-align: center;
+            margin: auto;
+            
+            
+            .player-welcome{
+                margin-bottom: 40px;
+            } 
+        }
+    }
+    
+    .recent-matches-section {
+        display: flex;
+        flex-direction: column;
+        background-color: #dddddd;
+        padding: 20px;
+        border-radius: 8px;
+        width: 80%;
+        min-height: 300px;
+        margin: 75px auto;
+    }
+    
+    .data-header, .match {
+        display: flex;
+        padding: 10px 0;
+        border-bottom: 1px solid #ccc;
+        list-style-type: none;
+        margin: 0;
+    }
+
+    .match {
+        background-color: #c5c5c5;
+    }
+
+    .match-opponent, .match-rating, .match-result, .match-rating-change, .match-date {
+        flex: 1;
+        text-align: center;
+    }
+    
+    .match-result.win {
+        background-color: rgb(26, 161, 26);
+    }
+    
+    .match-result.loss {
+        background-color: rgb(183, 3, 3);
+    }
+    
+    .match-rating-change.positive {
+        color: rgb(26, 161, 26);
+    }
+    
+    .match-rating-change.negative {
+        color: rgb(183, 3, 3);
+    }
+
+    .match:nth-child(even) {
+        background-color: #a3a3a3;
+    }
+
+}

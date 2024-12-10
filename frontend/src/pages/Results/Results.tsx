@@ -68,8 +68,8 @@ const Results: React.FC = () => {
       if (state) where['State'] = state;
       if (country) where['Country'] = country;
       if (sport) where['Sport'] = sport;
-      if (startDate) where['startDate'] = { $gte: startDate };  
-      if (endDate) where['endDate'] = { $lte: endDate };  
+      if (startDate) where['startDate'] = { $gte: startDate }; 
+      if (endDate) where['endDate'] = { $lte: endDate };
 
       const params = new URLSearchParams();
       params.append('where', JSON.stringify(where));

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import './Players.css';
 import config from '../../config';
 
@@ -122,6 +123,7 @@ const Players: React.FC = () => {
         />
         <select
           className="search-dropdown"
+          
           value={gender}
           onChange={(e) => setGender(e.target.value)}
         >
@@ -135,9 +137,9 @@ const Players: React.FC = () => {
           value={sport}
           onChange={handleSportChange}
         >
-          <option value="">Select Sport</option>
+          <option value=''>{'Select Sport'}</option>
           {sports.map((s) => (
-            <option value={s._id} key={s._id}>{s.sport}</option>
+            <option value={s._id}>{s.sport}</option>
           ))}
         </select>
         <button className="search-button" onClick={handleSearch} disabled={isLoading}>

@@ -2,23 +2,29 @@
 
 .players-page-container {
   .hero {
-    display: flex; 
-    align-items: center; 
-    justify-content: space-between; 
+    width: 100%;
+    display: flex;
     background-color: transparent;
-    width: 80%;
+    gap: 0;
     margin: 0 auto;
-    gap: 20px; 
   }
   
   .hero .left-side {
-    flex: 0 0 auto; 
-    margin-left: 0; 
+    display: block;
+    width: 50%;
+    text-align: center;
+    margin: auto;
+    h1{
+        font-size: 50px;
+    } 
   }
   
   .hero .right-side {
-    flex: 1 1 auto; 
-    text-align: left; 
+    display: block;
+    width: 50%;
+    text-align: center;
+    margin: auto;
+    justify-items: center;
   }
   
   .hero .title {
@@ -132,6 +138,10 @@
   margin: 0;
 }
 
+.player-row {
+  background-color: #c5c5c5;
+}
+
 .player-row:nth-child(even) {
   background-color: #a3a3a3;
 }
@@ -140,12 +150,6 @@
 .player-item {
   flex: 1;
   text-align: center;
-}
-
-.action-button {
-  width: 100px;
-  margin: 0;
-  font-size: small;
 }
 
 .no-results {

@@ -7,6 +7,8 @@ interface User {
   firstName: string;
   lastName: string;
   sport: string[];
+  elo: number;
+  dateOfBirth: string;
 }
 
 interface Tournament {
@@ -18,8 +20,10 @@ interface Tournament {
 const AddMatch: React.FC = () => {
   const [players, setPlayers] = useState<User[]>([]);
   const [tournaments, setTournaments] = useState<Tournament[]>([]);
-  const [winnerId, setWinnerId] = useState<string>(''); // New Winner field
-  const [loserId, setLoserId] = useState<string>(''); // Loser field
+  const [playerOneId, setPlayerOneId] = useState<string>('');
+  const [playerTwoId, setPlayerTwoId] = useState<string>('');
+  const [playerOneBirthYear, setPlayerOneBirthYear] = useState<string>('');
+  const [playerTwoBirthYear, setPlayerTwoBirthYear] = useState<string>('');
   const [tournamentId, setTournamentId] = useState<string>('');
   const [startDate, setStartDate] = useState<string>('');
   const [message, setMessage] = useState<string>('');
@@ -50,14 +54,48 @@ const AddMatch: React.FC = () => {
     fetchTournaments();
   }, []);
 
+  const getBirthYearByID = (playerID: string) => {
+    const player = players.find((p) => p._id === playerID)
+    return player ? player.dateOfBirth.substring(0,4) : null;
+  }
+
+  const getRatingByID = (playerID: string) => {
+    const player = players.find((p) => p._id === playerID)
+    return player ? player.elo : null;
+  }
+
+
   const handleAddMatch = async () => {
-    if (!winnerId || !loserId || !tournamentId || !startDate) {
+    if (!playerOneId || !playerTwoId || !playerOneBirthYear || !playerTwoBirthYear || !tournamentId || !startDate) {
       setMessage('Please fill in all fields');
       return;
     }
-  
-    if (winnerId === loserId) {
-      setMessage('Winner and Loser cannot be the same player');
+
+    if (getBirthYearByID(playerOneId) !== playerOneBirthYear.trim() || getBirthYearByID(playerTwoId) !== playerTwoBirthYear.trim()) {
+      setMessage('Incorrect birth year field(s)');
+      return;
+    }
+
+    let r1 = getRatingByID(playerOneId);
+    let r2 = getRatingByID(playerTwoId);
+    if (!r1 || !r2) {
+      setMessage('Internal Error');
+      return;
+    }
+    let e1 = 1/(1+10**((r2-r1)/400))
+    let e2 = 1/(1+10**((r1-r2)/400))
+    // NEW RATINGS FOR PLAYERS 1/2
+    
+    let updatep1 = 32 * (1-e1)
+    let updatep2 = 32 * (0-e2)
+    
+    let newr1 = r1 + updatep1
+    let newr2 = r2 + updatep2
+
+    
+
+    if (playerOneId === playerTwoId) {
+      setMessage('Player 1 and Player 2 cannot be the same');
       return;
     }
   
@@ -119,11 +157,19 @@ const AddMatch: React.FC = () => {
               </option>
             ))}
           </select>
+          <label>Birth Year</label>
+          <input
+            type='text'
+            value={playerOneBirthYear}
+            onChange={(e) => setPlayerOneBirthYear(e.target.value)}
+            placeholder='YYYY'
+            required>
+          </input>
         </div>
 
         {/* Loser Selection */}
         <div className="form-group">
-          <label>Loser</label>
+          <label>Opponent</label>
           <select
             value={loserId}
             onChange={(e) => setLoserId(e.target.value)}
@@ -136,6 +182,14 @@ const AddMatch: React.FC = () => {
               </option>
             ))}
           </select>
+          <label>Birth Year</label>
+          <input
+            type='text'
+            value={playerTwoBirthYear}
+            onChange={(e) => setPlayerTwoBirthYear(e.target.value)}
+            placeholder='YYYY'
+            required>
+          </input>
         </div>
 
         {/* Tournament Selection */}
@@ -157,7 +211,7 @@ const AddMatch: React.FC = () => {
 
         {/* Match Start Date */}
         <div className="form-group">
-          <label>Match Date & Time</label>
+          <label>Date</label>
           <input
             type="datetime-local"
             value={startDate}

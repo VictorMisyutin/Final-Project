@@ -1,23 +1,29 @@
 /* Reused CSS from Players.css and Home.css*/
 .results-page-container {
   .hero {
-    display: flex; 
-    align-items: center; 
-    justify-content: space-between; 
+    width: 100%;
+    display: flex;
     background-color: transparent;
-    width: 80%;
+    gap: 0;
     margin: 0 auto;
-    gap: 20px; 
   }
   
   .hero .left-side {
-    flex: 0 0 auto; 
-    margin-left: 0;
+    display: block;
+    width: 50%;
+    text-align: center;
+    margin: auto;
+    h1{
+        font-size: 50px;
+    } 
   }
   
   .hero .right-side {
-    flex: 1 1 auto; 
-    text-align: left; 
+    display: block;
+    width: 50%;
+    text-align: center;
+    margin: auto;
+    justify-items: center;
   }
   
   .hero .title {
@@ -91,6 +97,10 @@
 .tournament-item {
   flex: 1;
   text-align: center;
+}
+
+.tournament-row {
+  background-color: #c5c5c5;
 }
 
 .tournament-row:nth-child(even) {
