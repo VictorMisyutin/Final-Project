@@ -4,11 +4,11 @@ const Tournament = require('../models/tournament');
 const Sport = require('../models/sport');
 
 const calculateEloChange = (playerRating, opponentRating, isWinner, K = 32) => {
-    let e1 = 1 / (1 + 10 ** ((opponentRating - playerRating) / 400));
-    let e2 = 1 / (1 + 10 ** ((playerRating - opponentRating) / 400));
+    let expectedValue = 1 / (1 + 10 ** ((opponentRating - playerRating) / 400));
     
-    let updatep1 = K * (1 - e1);
-    let updatep2 = K * (0 - e2);
+    
+    let updatep1 = K * (1 - expectedValue);
+    let updatep2 = K * (0 - expectedValue);
     return isWinner ? Math.round(updatep1) : Math.round(updatep2);
 };
 
@@ -95,7 +95,7 @@ exports.getRecentMatchesByUser = (req, res) => {
 
     Match.find({ $or: [{ winner: userId }, { loser: userId }] })
         .sort({ startDate: -1 })
-        .limit(6)
+        .limit(10)
         .populate('winner loser', 'firstName lastName elo')  
         .populate('TournamentId', 'title Sport')
         .then(matches => {
