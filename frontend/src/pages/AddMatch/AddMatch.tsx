@@ -85,8 +85,12 @@ const AddMatch: React.FC = () => {
     let e1 = 1/(1+10**((r2-r1)/400))
     let e2 = 1/(1+10**((r1-r2)/400))
     // NEW RATINGS FOR PLAYERS 1/2
-    let newr1 = r1 + 32 * (1-e1)
-    let newr2 = r2 + 32 * (0-e2)
+    
+    let updatep1 = 32 * (1-e1)
+    let updatep2 = 32 * (0-e2)
+    
+    let newr1 = r1 + updatep1
+    let newr2 = r2 + updatep2
 
     
 
