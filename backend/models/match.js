@@ -6,7 +6,8 @@ const MatchSchema = new mongoose.Schema({
     TournamentId: { type: mongoose.Schema.Types.ObjectId, ref: 'Tournament', required: true },
     startDate: { type: Date, required: true },
     endDate: { type: Date },
-    RatingChangeForWinner: { type: Number, default: 0 }
+    RatingChangeForWinner: { type: Number, default: 0 },
+    RatingChangeForLoser: { type: Number, default: 0 }
 }, { timestamps: true });
 
 module.exports = mongoose.model('Match', MatchSchema);

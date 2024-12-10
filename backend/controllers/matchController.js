@@ -3,14 +3,16 @@ const User = require('../models/user');
 const Tournament = require('../models/tournament');
 const Sport = require('../models/sport');
 
-
-
 const calculateEloChange = (playerRating, opponentRating, isWinner, K = 32) => {
-    const expectedScore = 1 / (1 + Math.pow(10, (opponentRating - playerRating) / 400));
-    const actualScore = isWinner ? 1 : 0;
-    const ratingChange = K * (actualScore - expectedScore);
-    return Math.round(ratingChange); 1
+    let e1 = 1 / (1 + 10 ** ((opponentRating - playerRating) / 400));
+    let e2 = 1 / (1 + 10 ** ((playerRating - opponentRating) / 400));
+    
+    let updatep1 = K * (1 - e1);
+    let updatep2 = K * (0 - e2);
+    return isWinner ? Math.round(updatep1) : Math.round(updatep2);
 };
+
+
 
 // Updated createMatch function
 exports.createMatch = (req, res) => {
@@ -47,7 +49,7 @@ exports.createMatch = (req, res) => {
         winner.elo += ratingChangeForWinner;
         loser.elo += ratingChangeForLoser;
 
-        return Promise.all([
+        return Promise.all([ 
             winner.save(),
             loser.save()
         ])
@@ -58,7 +60,8 @@ exports.createMatch = (req, res) => {
                 TournamentId: tournamentId,
                 startDate: new Date(startDate),
                 endDate: endDate ? new Date(endDate) : null,
-                RatingChangeForWinner: ratingChangeForWinner
+                RatingChangeForWinner: ratingChangeForWinner,
+                RatingChangeForLoser: ratingChangeForLoser
             });
 
             return newMatch.save();
@@ -68,8 +71,6 @@ exports.createMatch = (req, res) => {
     })
     .catch(err => res.status(500).json({ message: 'Error creating match', data: err }));
 };
-
-
 
 
 
@@ -102,28 +103,30 @@ exports.getRecentMatchesByUser = (req, res) => {
                 return res.json({ message: 'No recent matches found', data: [] });
             }
 
-            const recentMatches = matches.map(match => {
+            const recentMatches = matches.map((match) => {
                 if (!match.winner || !match.loser) {
                     console.error('Missing player data in match:', match);
                     return null;
                 }
 
+                // Check if the user is the winner or loser
                 const isWinner = match.winner._id.toString() === userId;
                 const opponent = isWinner ? match.loser : match.winner;
 
                 const opponentName = opponent ? `${opponent.firstName} ${opponent.lastName}` : 'Unknown';
                 const calculatedResult = isWinner ? "Win" : "Lose";
+                const ratingChange = isWinner ? match.RatingChangeForWinner : match.RatingChangeForLoser;
 
                 return {
                     opponent: opponentName, 
                     opponent_rating: opponent.elo,
                     result: calculatedResult,
-                    rating_change: match.RatingChangeForWinner,
+                    rating_change: ratingChange,  // Display the correct rating change based on winner/loser
                     tournament: match.TournamentId.title,
                     sport: match.TournamentId.Sport.sport, 
                     start_date: match.startDate
                 };
-            }).filter(Boolean);
+            }).filter(Boolean); // Remove any null values
 
             res.json({ message: 'OK', data: recentMatches });
         })
@@ -132,6 +135,7 @@ exports.getRecentMatchesByUser = (req, res) => {
             res.status(500).json({ message: 'Error fetching matches', data: err });
         });
 };
+
 
 
 

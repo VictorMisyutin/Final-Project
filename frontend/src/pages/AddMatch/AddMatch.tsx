@@ -82,16 +82,6 @@ const AddMatch: React.FC = () => {
       return;
     }
 
-    let e1 = 1 / (1 + 10 ** ((r2 - r1) / 400));
-    let e2 = 1 / (1 + 10 ** ((r1 - r2) / 400));
-
-    // NEW RATINGS FOR WINNER AND LOSER
-    let updatep1 = 32 * (1 - e1);
-    let updatep2 = 32 * (0 - e2);
-
-    let newr1 = r1 + updatep1;
-    let newr2 = r2 + updatep2;
-
     if (winnerId === loserId) {
       setMessage('Winner and Loser cannot be the same');
       return;
