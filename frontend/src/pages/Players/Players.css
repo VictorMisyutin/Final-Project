@@ -93,29 +93,6 @@
   border-radius: 8px;
   overflow: hidden; /* Ensures rounded corners */
 }
-.data-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px;
-  list-style-type: none;
-  background-color: #f4f4f4;
-  font-weight: bold;
-  border-radius: 8px 8px 0 0; /* Rounded top corners */
-  z-index: 1;
-}
-
-
-.results-section-container {
-  width: calc(100% - 20px); /* Match the search-filters width */
-  max-width: 1600px; /* Same max width as search-filters */
-  margin: 20px auto; /* Center horizontally and add vertical spacing */
-  display: flex;
-  flex-direction: column;
-  background-color: #f4f4f4;
-  border-radius: 8px;
-  overflow: hidden; /* Ensures rounded corners */
-}
 
 .data-header {
   display: flex;

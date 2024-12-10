@@ -27,18 +27,19 @@
             } 
         }
     }
-    
+
     .recent-matches-container {
-        width: 80%;
-        margin: 75px auto;
+        width: calc(100% - 20px); /* Matches other centered sections */
+        max-width: 1600px; /* Same max-width for consistency */
+        margin: 20px auto; /* Center it horizontally with spacing */
         display: flex;
         flex-direction: column;
         background-color: #f4f4f4;
         border-radius: 8px;
         overflow: hidden; /* Ensures rounded corners don't affect the scrollable area */
       }
-    
-     .data-header {
+      
+      .data-header {
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -47,32 +48,45 @@
         font-weight: bold;
         border-radius: 8px 8px 0 0; /* Rounded top corners */
         z-index: 1;
+        
       }
-      
+    
     .recent-matches-section {
         display: flex;
         flex-direction: column;
         background-color: #dddddd;
         padding: 10px;
-        height: 300px; /* Fixed height for scrollable area */
+        height: 300px; /* Fixed height for scrollable section */
         overflow-y: auto; /* Enable vertical scrolling */
         scrollbar-width: thin; /* Thin scrollbar for Firefox */
         scrollbar-color: #888 #ddd; /* Custom scrollbar colors */
       }
       
-    .recent-matches-section::-webkit-scrollbar {
-        width: 10px; /* Width of the scrollbar */
+      .recent-matches-section::-webkit-scrollbar {
+        width: 10px; /* Scrollbar width */
       }
       
-    .recent-matches-section::-webkit-scrollbar-thumb {
+      .recent-matches-section::-webkit-scrollbar-thumb {
         background: #888; /* Scrollbar thumb color */
         border-radius: 5px; /* Rounded scrollbar thumb */
       }
       
-    .recent-matches-section::-webkit-scrollbar-thumb:hover {
-        background: #555; /* Darker scrollbar thumb when hovered */
+      .recent-matches-section::-webkit-scrollbar-thumb:hover {
+        background: #555; /* Darker scrollbar thumb on hover */
       }
       
+      .match-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 0;
+        border-bottom: 1px solid #ccc;
+        background-color: #c5c5c5;
+      }
+
+      .match-row:nth-child(even) {
+        background-color: #a3a3a3;
+      }
 
     .match {
         background-color: #c5c5c5;
