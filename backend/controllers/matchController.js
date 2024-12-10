@@ -5,6 +5,14 @@ const Sport = require('../models/sport');
 
 
 
+const calculateEloChange = (playerRating, opponentRating, isWinner, K = 32) => {
+    const expectedScore = 1 / (1 + Math.pow(10, (opponentRating - playerRating) / 400));
+    const actualScore = isWinner ? 1 : 0;
+    const ratingChange = K * (actualScore - expectedScore);
+    return Math.round(ratingChange); 1
+};
+
+// Updated createMatch function
 exports.createMatch = (req, res) => {
     const { winnerId, loserId, tournamentId, startDate, endDate } = req.body;
 
@@ -21,8 +29,8 @@ exports.createMatch = (req, res) => {
         User.findById(loserId),
         Tournament.findById(tournamentId)
     ])
-    .then(([winnerId, loserId, tournament]) => {
-        if (!winnerId || !loserId) {
+    .then(([winner, loser, tournament]) => {
+        if (!winner || !loser) {
             return res.status(404).json({ message: 'Player not found' });
         }
         if (!tournament) {
@@ -33,20 +41,34 @@ exports.createMatch = (req, res) => {
             return res.status(400).json({ message: 'Tournament must have a sport associated with it' });
         }
 
-        const newMatch = new Match({
-            winner: winnerId,
-            loser: loserId,
-            TournamentId: tournamentId,
-            startDate: new Date(startDate),
-            endDate: endDate ? new Date(endDate) : null,
-            RatingChangeForWinner: 0
-        });
+        const ratingChangeForWinner = calculateEloChange(winner.elo, loser.elo, true);
+        const ratingChangeForLoser = calculateEloChange(loser.elo, winner.elo, false);
 
-        return newMatch.save();
+        winner.elo += ratingChangeForWinner;
+        loser.elo += ratingChangeForLoser;
+
+        return Promise.all([
+            winner.save(),
+            loser.save()
+        ])
+        .then(() => {
+            const newMatch = new Match({
+                winner: winnerId,
+                loser: loserId,
+                TournamentId: tournamentId,
+                startDate: new Date(startDate),
+                endDate: endDate ? new Date(endDate) : null,
+                RatingChangeForWinner: ratingChangeForWinner
+            });
+
+            return newMatch.save();
+        })
+        .then(match => res.status(201).json({ message: 'Match created', data: match }))
+        .catch(err => res.status(500).json({ message: 'Error creating match', data: err }));
     })
-    .then(match => res.status(201).json({ message: 'Match created', data: match }))
     .catch(err => res.status(500).json({ message: 'Error creating match', data: err }));
 };
+
 
 
 
