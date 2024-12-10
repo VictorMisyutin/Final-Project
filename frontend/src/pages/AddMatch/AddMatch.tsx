@@ -98,17 +98,7 @@ const AddMatch: React.FC = () => {
       setMessage('Player 1 and Player 2 cannot be the same');
       return;
     }
-  
-    const matchData = {
-      playerOneId: winnerId, // Winner
-      playerTwoId: loserId,  // Loser
-      tournamentId,
-      startDate: new Date(startDate).toISOString(),
-      winnerId: winnerId, // Explicit Winner field
-    };
-  
-    console.log('Match Data:', matchData); // Debugging
-  
+
     setLoading(true);
     try {
       const response = await fetch(config.backendUrl + '/api/matches', {
@@ -116,19 +106,24 @@ const AddMatch: React.FC = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(matchData),
+        body: JSON.stringify({
+          playerOneId,
+          playerTwoId,
+          tournamentId,
+          startDate: new Date(startDate).toISOString(),
+        }),
       });
-  
+
       const data = await response.json();
-  
+
       if (data.message === 'Match created') {
         setMessage('Match added successfully');
-        setWinnerId('');
-        setLoserId('');
+        setPlayerOneId('');
+        setPlayerTwoId('');
         setTournamentId('');
         setStartDate('');
       } else {
-        setMessage(data.message || 'Error creating match');
+        setMessage('Error creating match');
       }
     } catch (error) {
       setMessage('Error creating match');
@@ -140,17 +135,16 @@ const AddMatch: React.FC = () => {
 
   return (
     <div className="add-match-container">
-      <h2>Submit Match Result</h2>
+      <h2>Add New Match</h2>
       <form onSubmit={(e) => e.preventDefault()}>
-        {/* Winner Selection */}
         <div className="form-group">
           <label>Winner</label>
           <select
-            value={winnerId}
-            onChange={(e) => setWinnerId(e.target.value)}
+            value={playerOneId}
+            onChange={(e) => setPlayerOneId(e.target.value)}
             required
           >
-            <option value="">Select Winner</option>
+            <option value="">Select Player 1</option>
             {players.map((player) => (
               <option key={player._id} value={player._id}>
                 {player.firstName} {player.lastName}
@@ -167,15 +161,14 @@ const AddMatch: React.FC = () => {
           </input>
         </div>
 
-        {/* Loser Selection */}
         <div className="form-group">
           <label>Opponent</label>
           <select
-            value={loserId}
-            onChange={(e) => setLoserId(e.target.value)}
+            value={playerTwoId}
+            onChange={(e) => setPlayerTwoId(e.target.value)}
             required
           >
-            <option value="">Select Loser</option>
+            <option value="">Select Player 2</option>
             {players.map((player) => (
               <option key={player._id} value={player._id}>
                 {player.firstName} {player.lastName}
@@ -192,7 +185,6 @@ const AddMatch: React.FC = () => {
           </input>
         </div>
 
-        {/* Tournament Selection */}
         <div className="form-group">
           <label>Tournament</label>
           <select
@@ -209,7 +201,6 @@ const AddMatch: React.FC = () => {
           </select>
         </div>
 
-        {/* Match Start Date */}
         <div className="form-group">
           <label>Date</label>
           <input
@@ -220,17 +211,15 @@ const AddMatch: React.FC = () => {
           />
         </div>
 
-        {/* Submit Button */}
         <button
           type="button"
           onClick={handleAddMatch}
           disabled={loading}
         >
-          {loading ? 'Submitting...' : 'Add Match'}
+          {loading ? 'Creating Match...' : 'Add Match'}
         </button>
       </form>
 
-      {/* Message Display */}
       {message && <p className="message">{message}</p>}
     </div>
   );
