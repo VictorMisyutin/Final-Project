@@ -1,125 +1,170 @@
-.dashboard-page-container{
+/* Updated Dashboard.css */
+.dashboard-page-container {
+  width: 100%;
+  box-sizing: border-box;
+}
 
-    .hero{
-        width: 100%;
-        display: flex;
-        background-color: transparent;
-        gap: 0;
-        margin: 0 auto;
-        .left-side{
-            display: block;
-            width: 50%;
-            text-align: center;
-            margin: auto;
-            h1{
-                font-size: 50px;
-            }
-        }
-        .right-side{
-            display: block;
-            width: 50%;
-            text-align: center;
-            margin: auto;
-            
-            
-            .player-welcome{
-                margin-bottom: 40px;
-            } 
-        }
-    }
+.hero {
+  width: 100%;
+  flex-direction: column;
+  display: flex;
+  flex-wrap: wrap;
+  background-color: transparent;
+  gap: 20px;
+  margin: 0 auto;
+  box-sizing: border-box;
+  padding: 20px;
+}
 
-    .recent-matches-container {
-        width: calc(100% - 20px); /* Matches other centered sections */
-        max-width: 1600px; /* Same max-width for consistency */
-        margin: 20px auto; /* Center it horizontally with spacing */
-        display: flex;
-        flex-direction: column;
-        background-color: #f4f4f4;
-        border-radius: 8px;
-        overflow: hidden; /* Ensures rounded corners don't affect the scrollable area */
-      }
-      
-      .data-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 10px;
-        background-color: #f4f4f4;
-        font-weight: bold;
-        border-radius: 8px 8px 0 0; /* Rounded top corners */
-        z-index: 1;
-        
-      }
-    
-    .recent-matches-section {
-        display: flex;
-        flex-direction: column;
-        background-color: #dddddd;
-        padding: 10px;
-        height: 300px; /* Fixed height for scrollable section */
-        overflow-y: auto; /* Enable vertical scrolling */
-        scrollbar-width: thin; /* Thin scrollbar for Firefox */
-        scrollbar-color: #888 #ddd; /* Custom scrollbar colors */
-      }
-      
-      .recent-matches-section::-webkit-scrollbar {
-        width: 10px; /* Scrollbar width */
-      }
-      
-      .recent-matches-section::-webkit-scrollbar-thumb {
-        background: #888; /* Scrollbar thumb color */
-        border-radius: 5px; /* Rounded scrollbar thumb */
-      }
-      
-      .recent-matches-section::-webkit-scrollbar-thumb:hover {
-        background: #555; /* Darker scrollbar thumb on hover */
-      }
-      
-      .match-row {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding: 10px 0;
-        border-bottom: 1px solid #ccc;
-        background-color: #c5c5c5;
-      }
+.left-side, .right-side {
+  flex: 1 1 50%;
+  max-width: 50%;
+  text-align: center;
+  margin: auto;
+  box-sizing: border-box;
+}
 
-      .match-row:nth-child(even) {
-        background-color: #a3a3a3;
-      }
+.left-side h1 {
+  font-size: 50px;
+}
 
-    .match {
-        background-color: #c5c5c5;
-    }
+.right-side .player-welcome {
+  margin-bottom: 40px;
+  font-size: 18px;
+  font-weight: bold;
+}
 
-    .match-opponent, .match-rating, .match-result, .match-rating-change, .match-date {
-        width: 20%;
-        text-align: center;
-    }
+.right-side .player-rating {
+  font-size: 18px;
+  font-weight: 600;
+}
 
-    .match-result {
-        border-radius: 10px;
-        padding: 5px 0px;
-        width: 60px;
-    }
+.recent-matches-container {
+  width: 90%;
+  max-width: 1200px;
+  margin: 20px auto;
+  display: flex;
+  flex-direction: column;
+  background-color: #f4f4f4;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  box-sizing: border-box;
+}
 
-    .match-result.win {
-        background-color: rgb(26, 161, 26);
-    }
+.data-header {
+  display: flex;
+  align-items: center;
+  padding: 15px;
+  background-color: #eeeeee;
+  font-weight: bold;
+  border-radius: 12px 12px 0 0;
+}
 
-    .match-result.loss {
-        background-color: rgb(183, 3, 3);
-    }
+.recent-matches-section {
+  display: flex;
+  flex-direction: column;
+  background-color: #ffffff;
+  padding: 15px;
+  max-height: 300px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #888 #ddd;
+}
 
-    .match-rating-change.positive {
-        color: rgb(26, 161, 26);
-    }
+.recent-matches-section::-webkit-scrollbar {
+  width: 10px;
+}
 
-    .match-rating-change.negative {
-        color: rgb(183, 3, 3);
-    }
+.recent-matches-section::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 5px;
+}
 
-    .match:nth-child(even) {
-        background-color: #a3a3a3;
-    }
-};
+.recent-matches-section::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+.match-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px;
+  border-bottom: 1px solid #ccc;
+  background-color: #ffffff;
+  transition: transform 0.2s, box-shadow 0.2s;
+  margin-bottom: 10px;
+}
+
+.match-row:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.match-row:hover {
+  transform: scale(1.02);
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.match-row > div {
+  flex: 1;
+  text-align: center;
+  font-size: 14px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.5;
+}
+
+.match-result {
+  border-radius: 10px;
+  padding: 5px 10px;
+  width: auto;
+}
+
+.match-result.win {
+  background-color: rgb(26, 161, 26);
+  color: white;
+}
+
+.match-result.loss {
+  background-color: rgb(183, 3, 3);
+  color: white;
+}
+
+.match-rating-change.positive {
+  color: rgb(26, 161, 26);
+  font-weight: bold;
+}
+
+.match-rating-change.negative {
+  color: rgb(183, 3, 3);
+  font-weight: bold;
+}
+
+@media (max-width: 768px) {
+  .hero {
+    flex-direction: column;
+  }
+
+  .left-side, .right-side {
+    flex: 1 1 100%;
+    max-width: 100%;
+  }
+
+  .data-header {
+    flex-direction: row;
+    padding: 10px;
+  }
+
+  .match-row {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 10px;
+  }
+
+  .match-row > div {
+    width: 100%;
+    text-align: left;
+    margin-bottom: 5px;
+  }
+}
