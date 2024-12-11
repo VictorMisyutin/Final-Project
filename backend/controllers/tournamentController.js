@@ -30,33 +30,32 @@ exports.getTournaments = (req, res) => {
 
 // Create a new tournament
 exports.createTournament = async (req, res) => {
-    const { title, City, State, Country, Sport, startDate, endDate, password } = req.body;
-
-    if (!title || !City || !Country || !Sport || !password) {
+    console.log("Request body:", req.body);
+    if (!req.body.title || !req.body.City || !req.body.Country || !req.body.State || !req.body.password) {
         return res.status(400).json({ message: 'Title, City, Country, Sport, and Password are required fields' });
     }
+    console.log("here");
 
     try {
-        const sport = await Sport.findById(Sport);
+        const sport = await Sport.findById(req.body.Sport);
         if (!sport) {
             return res.status(400).json({ message: 'Invalid Sport ID', data: {} });
         }
 
         const newTournament = new Tournament({
-            title,
-            City,
-            State,
-            Country,
-            Sport,
-            startDate,
-            endDate,
-            password,
+            title: req.body.title,
+            City: req.body.City,
+            State: req.body.State,
+            Country: req.body.Country,
+            Sport: req.body.Sport,
+            startDate: req.body.startDate,
+            endDate: req.body.endDate,
+            password: req.body.password,
             dateCreated: Date.now(),
             users: []
         });
-
         await newTournament.save();
-        res.status(201).json({ message: 'Tournament created successfully', data: newTournament });
+        res.status(201).json({ message: 'Tournament created', data: newTournament });
     } catch (err) {
         res.status(500).json({ message: 'Error creating tournament', data: err });
     }

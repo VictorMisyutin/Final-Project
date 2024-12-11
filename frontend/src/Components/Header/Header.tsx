@@ -62,6 +62,7 @@ const Header: React.FC = () => {
         <Link to="/players" className="link">Players</Link>
         <Link to="/results" className="link">Results</Link>
         { isAuthenticated && <Link to="/add-match" className="link">Submit Match</Link>}
+        { isAuthenticated && <Link to="/add-tournament" className="link">Add Tournament</Link>}
         {isAuthenticated ? (
           <input
             className="log-button"

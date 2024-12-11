@@ -14,6 +14,7 @@ import Players from './pages/Players/Players';
 import Results from './pages/Results/Results';
 import Profile from './pages/Profile/Profile';
 import TournamentView from './pages/TournamentView/TournamentView';
+import AddTournament from './pages/AddTournament/AddTournament';
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
       <Route path="/register" element={<Register />}/>
       <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>}/>
       <Route path="/add-match" element={<ProtectedRoute><AddMatch /></ProtectedRoute>}/>
+      <Route path="/add-tournament" element={<ProtectedRoute><AddTournament /></ProtectedRoute>}/>
       <Route path="/players" element={<Players /> }/>
       <Route path="/results" element={<Results />}/>
       <Route path="/profile/:userid" element={<Profile />}/>
