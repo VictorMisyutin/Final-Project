@@ -1,146 +1,155 @@
-/* Reused CSS from Players.css and Home.css*/
+/* Updated Results.css */
 .results-page-container {
-  .hero {
-    width: 100%;
-    display: flex;
-    background-color: transparent;
-    gap: 0;
-    margin: 0 auto;
-  }
-  
-  .hero .left-side {
-    display: block;
-    width: 50%;
-    text-align: center;
-    margin: auto;
-    h1{
-        font-size: 50px;
-    } 
-  }
-  
-  .hero .right-side {
-    display: block;
-    width: 50%;
-    text-align: center;
-    margin: auto;
-    justify-items: center;
-  }
-  
-  .hero .title {
-    font-size: 50px;
-    font-weight: bold;
-    margin: 0;
-  }
-  
-  .hero .description {
-    font-size: 16px;
-    line-height: 1.5;
-    margin: 0;
-  }
+  width: 100%;
+  box-sizing: border-box;
+  margin: 0 auto;
 }
 
-.results-section-container {
-  width: calc(100% - 20px); /* Match the width of search filters */
-  max-width: 1600px; /* Same max width as search filters */
-  margin: 20px auto; /* Center horizontally and add vertical spacing */
+.hero {
+  width: 100%;
   display: flex;
-  flex-direction: column;
-  background-color: #f4f4f4;
-  border-radius: 8px;
-  overflow: hidden; /* Ensures rounded corners */
-  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1); /* Optional for better appearance */
-}
-.data-header {
-  display: flex;
-  justify-content: space-between;
+  flex-wrap: wrap;
   align-items: center;
-  padding: 10px;
-  background-color: #f4f4f4;
-  font-weight: bold;
-  border-radius: 8px 8px 0 0; /* Rounded top corners */
-  z-index: 1;
-}
-.results-section {
-  display: flex;
-  flex-direction: column;
-  background-color: #dddddd;
-  padding: 10px;
-  height: 300px; /* Fixed height for scrollable section */
-  overflow-y: auto; /* Enable vertical scrolling */
-  scrollbar-width: thin; /* Thin scrollbar for Firefox */
-  scrollbar-color: #888 #ddd; /* Custom scrollbar colors */
-}
-.results-section::-webkit-scrollbar {
-  width: 10px; /* Scrollbar width */
-}
-.results-section::-webkit-scrollbar-thumb {
-  background: #888; /* Scrollbar thumb color */
-  border-radius: 5px; /* Rounded scrollbar thumb */
-}
-.results-section::-webkit-scrollbar-thumb:hover {
-  background: #555; /* Darker scrollbar thumb on hover */
+  padding: 20px;
+  gap: 20px;
 }
 
-.tournament-row {
-  display: flex;
-  padding: 10px 0;
-  border-bottom: 1px solid #ccc;
-  list-style: none;
-  margin: 0;
-}
-
-.tournament-item {
-  flex: 1;
+.hero .left-side, .hero .right-side {
+  flex: 1 1 50%;
   text-align: center;
 }
 
-.tournament-row {
-  background-color: #c5c5c5;
+.hero .title {
+  font-size: 50px;
+  font-weight: bold;
+  margin: 0;
 }
 
-.tournament-row:nth-child(even) {
-  background-color: #a3a3a3;
+.hero .description {
+  font-size: 18px;
+  line-height: 1.6;
+  margin: 0;
 }
 
 .search-filters {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
+  justify-content: center;
+  gap: 15px;
   margin: 20px auto;
-  padding: 10px;
-  width: calc(100% - 20px);
-  max-width: 1600px;
+  padding: 20px;
+  max-width: 1200px;
   background-color: #f9f9f9;
   border: 1px solid #ccc;
   border-radius: 8px;
-  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
-  align-items: center; 
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .search-input,
-.search-dropdown,
-.search-button {
-  flex: 1 1 calc(20% - 10px); 
-  min-width: 120px; 
+.search-dropdown {
+  flex: 1 1 200px;
+  padding: 10px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
 }
 
 .search-button {
-  flex: 1 1 100%; 
-  padding: 15px;
-  border: none;
-  background-color: green;
+  flex: 1 1 120px;
+  padding: 10px 20px;
+  background-color: #007bff;
   color: white;
+  border: none;
   border-radius: 4px;
   cursor: pointer;
   font-size: 16px;
-  text-align: center;
+  font-weight: bold;
 }
 
 .search-button:hover {
-  background-color: darkgreen;
+  background-color: #0056b3;
 }
 
 .search-button:disabled {
   background-color: lightgray;
   cursor: not-allowed;
+}
+
+.results-section-container {
+  max-width: 1200px;
+  margin: 20px auto;
+  display: flex;
+  flex-direction: column;
+  background-color: #ffffff;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.data-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px;
+  background-color: #eeeeee;
+  font-weight: bold;
+  border-radius: 8px 8px 0 0;
+}
+
+.results-section {
+  display: flex;
+  flex-direction: column;
+  padding: 15px;
+  max-height: 400px;
+  overflow-y: auto;
+  background-color: #fafafa;
+  scrollbar-width: thin;
+  scrollbar-color: #888 #ddd;
+}
+
+.results-section::-webkit-scrollbar {
+  width: 10px;
+}
+
+.results-section::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 5px;
+}
+
+.results-section::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+.tournament-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px;
+  border-bottom: 1px solid #ccc;
+  background-color: #ffffff;
+  transition: transform 0.2s, box-shadow 0.2s;
+  margin-bottom: 10px;
+}
+
+.tournament-row:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.tournament-row:hover {
+  transform: scale(1.02);
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.tournament-item {
+  flex: 1 1 14%;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.no-results {
+  text-align: center;
+  font-size: 16px;
+  color: #999;
+  padding: 20px;
 }

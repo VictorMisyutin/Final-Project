@@ -1,62 +1,54 @@
-/* Reused CSS from Home.css */
-
+/* Updated Players.css */
 .players-page-container {
-  .hero {
-    width: 100%;
-    display: flex;
-    background-color: transparent;
-    gap: 0;
-    margin: 0 auto;
-  }
-  
-  .hero .left-side {
-    display: block;
-    width: 50%;
-    text-align: center;
-    margin: auto;
-    h1{
-        font-size: 50px;
-    } 
-  }
-  
-  .hero .right-side {
-    display: block;
-    width: 50%;
-    text-align: center;
-    margin: auto;
-    justify-items: center;
-  }
-  
-  .hero .title {
-    font-size: 50px;
-    font-weight: bold;
-    margin: 0;
-  }
-  
-  .hero .description {
-    font-size: 16px;
-    line-height: 1.5;
-    margin: 0;
-  }
+  width: 100%;
+  box-sizing: border-box;
+  margin: 0 auto;
+}
+
+.hero {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  padding: 20px;
+  gap: 20px;
+}
+
+.hero .left-side, .hero .right-side {
+  flex: 1 1 50%;
+  text-align: center;
+}
+
+.hero .title {
+  font-size: 50px;
+  font-weight: bold;
+  margin: 0;
+  color: #ffffff;
+}
+
+.hero .description {
+  font-size: 18px;
+  line-height: 1.6;
+  margin: 0;
 }
 
 .search-filters {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px; 
-  margin: 20px auto; 
-  padding: 10px;
-  width: calc(100% - 20px); 
-  max-width: 1600px; 
+  justify-content: center;
+  gap: 10px;
+  margin: 20px auto;
+  padding: 20px;
+  max-width: 1200px;
   background-color: #f9f9f9;
   border: 1px solid #ccc;
   border-radius: 8px;
-  box-shadow: 0px 2px 5px #0000001a;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .search-input,
 .search-dropdown {
-  flex: 1 1 200px; 
+  flex: 1 1 200px;
   padding: 10px;
   border-radius: 4px;
   border: 1px solid #ccc;
@@ -64,7 +56,7 @@
 }
 
 .search-button {
-  flex: 1 1 100px; 
+  flex: 1 1 120px;
   padding: 10px 20px;
   background-color: green;
   color: white;
@@ -72,6 +64,7 @@
   border-radius: 4px;
   cursor: pointer;
   font-size: 16px;
+  font-weight: bold;
 }
 
 .search-button:hover {
@@ -84,74 +77,95 @@
 }
 
 .results-section-container {
-  width: calc(100% - 20px); /* Match the search-filters width */
-  max-width: 1600px; /* Same max width as search-filters */
-  margin: 20px auto; /* Center horizontally and add vertical spacing */
+  max-width: 1200px;
+  margin: 20px auto;
   display: flex;
   flex-direction: column;
   background-color: #f4f4f4;
   border-radius: 8px;
-  overflow: hidden; /* Ensures rounded corners */
+  overflow: hidden;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .data-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px;
-  background-color: #f4f4f4;
+  padding: 15px;
+  background-color: #eeeeee;
   font-weight: bold;
-  border-radius: 8px 8px 0 0; /* Rounded top corners */
-  z-index: 1;
+  border-radius: 8px 8px 0 0;
 }
 
 .results-section {
   display: flex;
   flex-direction: column;
-  background-color: #dddddd;
   padding: 10px;
-  height: 300px; /* Fixed height for scrollable section */
-  overflow-y: auto; /* Enable vertical scrolling */
-  scrollbar-width: thin; /* Thin scrollbar for Firefox */
-  scrollbar-color: #888 #ddd; /* Custom scrollbar colors */
+  max-height: 300px;
+  overflow-y: auto;
+  background-color: #ffffff;
+  scrollbar-width: thin;
+  scrollbar-color: #888 #ddd;
 }
+
 .results-section::-webkit-scrollbar {
-  width: 10px; /* Scrollbar width */
+  width: 10px;
 }
+
 .results-section::-webkit-scrollbar-thumb {
-  background: #888; /* Scrollbar thumb color */
-  border-radius: 5px; /* Rounded scrollbar thumb */
+  background: #888;
+  border-radius: 5px;
 }
+
 .results-section::-webkit-scrollbar-thumb:hover {
-  background: #555; /* Darker scrollbar thumb on hover */
+  background: #555;
 }
 
 .player-row {
   display: flex;
-  padding: 10px 0;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px;
   border-bottom: 1px solid #ccc;
-  list-style: none;
-  margin: 0;
+  background-color: #ffffff;
+  transition: transform 0.2s, box-shadow 0.2s;
+  margin-bottom: 10px;
 }
 
 .player-row:nth-child(even) {
-  background-color: #a3a3a3;
+  background-color: #f9f9f9;
+}
+
+.player-row:hover {
+  transform: scale(1.02);
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .header-item,
 .player-item {
-  flex: 1;
+  flex: 1 1 16%;
   text-align: center;
+  font-size: 14px;
+  font-weight: 500;
 }
 
 .action-button {
-  width: 100px;
-  margin: 0;
-  font-size: small;
+  display: inline-block;
+  padding: 5px 10px;
+  color: white;
+  background-color: blue;
+  border-radius: 4px;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.action-button:hover {
+  background-color: darkblue;
 }
 
 .no-results {
-  margin-top: 20px;
   text-align: center;
+  font-size: 16px;
   color: #999;
+  padding: 20px;
 }
