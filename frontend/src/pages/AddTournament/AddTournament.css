@@ -1,8 +1,11 @@
 .add-tournament-container {
     padding: 20px;
-    background-color: #f9f9f9;
+    background-color: #dbdbdb;
     max-width: 600px;
     margin: 0 auto;
+    margin-top: 20px;
+    margin-bottom: 100px;
+    border-radius: 10px;
 }
 
 h2 {
