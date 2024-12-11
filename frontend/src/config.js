@@ -1,7 +1,7 @@
 const config = {
     development: {
       // backendUrl: "http://localhost:4000"
-      backendUrl: "https://4a8f-66-253-190-21.ngrok-free.app"
+      backendUrl: "https://a7a3-66-253-130-240.ngrok-free.app"
     },
     production: {
       backendUrl: "https://figure-out-later.com" 
