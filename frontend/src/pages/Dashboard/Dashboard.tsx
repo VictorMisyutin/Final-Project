@@ -6,7 +6,6 @@ const Dashboard: React.FC = () => {
   const [matches, setMatches] = useState<any[]>([]);
   const [userName, setUserName] = useState<string>('');
   const [userRating, setUserRating] = useState<number>(0);
-  const [opponentNames, setOpponentNames] = useState<string[]>([]);
 
   const userId = localStorage.getItem('userId') || '';
 
@@ -15,7 +14,7 @@ const Dashboard: React.FC = () => {
       if (!userId) return;
 
       try {
-        const response = await fetch(config.backendUrl + `/api/users/${userId}`);
+        const response = await fetch(`${config.backendUrl}/api/users/${userId}`);
         const data = await response.json();
         if (data.message === 'OK') {
           setUserName(`${data.data.firstName} ${data.data.lastName}`);
@@ -32,16 +31,12 @@ const Dashboard: React.FC = () => {
       if (!userId) return;
 
       try {
-        const response = await fetch(config.backendUrl + `/api/matches/${userId}`);
+        const response = await fetch(`${config.backendUrl}/api/matches/recent/${userId}`);
         const data = await response.json();
 
         if (data.message === 'OK') {
           const pastMatches = data.data.filter((match: any) => new Date(match.start_date) < new Date());
-
           setMatches(pastMatches);
-          console.log(pastMatches)
-          const names = pastMatches.map((match: any) => match.opponent);
-          setOpponentNames(names);
         } else {
           console.error('Failed to fetch recent matches');
         }
@@ -78,12 +73,12 @@ const Dashboard: React.FC = () => {
         <div className="recent-matches-section">
           {matches.map((match, index) => (
             <div className="match-row" key={index}>
-              <div className="match-opponent">{opponentNames[index] ?? '-'}</div>
-              <div className="match-rating">{match.opponent_rating ?? '--'}</div>
-              <div className="match-result">{match.result ?? '--'}</div>
-              <div className="match-rating-change">{match.rating_change ?? '--'}</div>
+              <div className="match-opponent">{match.opponent || 'Unknown'}</div>
+              <div className="match-rating">{match.opponent_rating || '--'}</div>
+              <div className="match-result">{match.result || '--'}</div>
+              <div className="match-rating-change">{match.rating_change || '--'}</div>
               <div className="match-date">
-                {new Date(match.start_date ?? '--').toLocaleDateString()}
+                {match.start_date ? new Date(match.start_date).toLocaleDateString() : '--'}
               </div>
             </div>
           ))}

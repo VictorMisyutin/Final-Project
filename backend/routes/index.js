@@ -15,9 +15,6 @@ router.route('/users/:id')
     .put(userController.updateUser)
     .delete(userController.deleteUser);
 
-router.route('/matches/:userId')
-    .get(matchController.getRecentMatchesByUser);
-
 router.route('/verify/user').get(userController.verifyUser);
 
 // Login Route
@@ -46,9 +43,12 @@ router.route('/matches')
 .post(matchController.createMatch);
 
 router.route('/matches/:matchId')
-.get(matchController.getMatchById)
-.put(matchController.updateMatch)
-.delete(matchController.deleteMatch);
+    .get(matchController.getMatchById)
+    .put(matchController.updateMatch)
+    .delete(matchController.deleteMatch);
+
+router.route('/matches/recent/:userId')
+    .get(matchController.getRecentMatchesByUser);
 
 router.route('/tournaments/:tournamentId/matches')
 .get(matchController.getMatchesByTournament);
