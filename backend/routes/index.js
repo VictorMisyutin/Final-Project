@@ -5,6 +5,10 @@ const tournamentController = require('../controllers/tournamentController');
 const matchController = require('../controllers/matchController')
 const sportController = require('../controllers/sportController');
 
+router.get('/', (req, res) => {
+    res.send('Welcome to the API!');
+});
+
 // User Routes
 router.route('/users')
 .get(userController.getUsers)
