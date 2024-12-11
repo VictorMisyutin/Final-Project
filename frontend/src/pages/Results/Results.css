@@ -93,12 +93,15 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-direction: row;
   padding: 15px;
   background-color: #eeeeee;
   font-weight: bold;
   border-radius: 8px 8px 0 0;
 }
-
+.header-item {
+  flex: 1 1 11%;
+}
 .results-section {
   display: flex;
   flex-direction: column;

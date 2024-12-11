@@ -1,4 +1,4 @@
-import React, { useState, useEffect} from 'react';
+import React, { useState, useEffect, useRef} from 'react';
 import { Link } from 'react-router-dom';
 import './Results.css';
 import config from '../../config';
@@ -172,7 +172,7 @@ const Results: React.FC = () => {
         </button>
       </div>
       <div className="results-section-container">
-        <div className="data-header">
+        <div className="data-header" id="tourny-data-header">
           <div className="header-item">Title</div>
           <div className="header-item">City</div>
           <div className="header-item">State</div>
