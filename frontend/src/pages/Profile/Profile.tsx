@@ -17,7 +17,13 @@ const Profile: React.FC = () => {
 
         const fetchUserData = async () => {
             try {
-                const response = await fetch(config.backendUrl + `/api/users/${userid}`);
+                const response = await fetch(config.backendUrl + `/api/users/${userid}`, {
+                    method: 'GET',
+                    headers: {
+                        'ngrok-skip-browser-warning': 'true',  // Skip the Ngrok warning page
+                        'Content-Type': 'application/json',    // Ensure the response is treated as JSON
+                    },
+                });
                 const data = await response.json();
                 if (data.message === 'OK') {
                     setUserName(`${data.data.firstName} ${data.data.lastName}`);
@@ -31,21 +37,27 @@ const Profile: React.FC = () => {
         };
 
         const fetchRecentMatches = async () => {
-        try {
-            const response = await fetch(config.backendUrl + `/api/matches/recent/${userid}`);
-            const data = await response.json();
+            try {
+                const response = await fetch(config.backendUrl + `/api/matches/recent/${userid}`, {
+                    method: 'GET',
+                    headers: {
+                        'ngrok-skip-browser-warning': 'true',  // Skip the Ngrok warning page
+                        'Content-Type': 'application/json',    // Ensure the response is treated as JSON
+                    },
+                });
+                const data = await response.json();
 
-            if (data.message === 'OK') {
-            const pastMatches = data.data.filter((match: any) => new Date(match.start_date) < new Date());
-            setMatches(pastMatches);
-            const names = pastMatches.map((match: any) => match.opponent);
-            setOpponentNames(names);
-            } else {
-            console.error('Failed to fetch recent matches');
+                if (data.message === 'OK') {
+                    const pastMatches = data.data.filter((match: any) => new Date(match.start_date) < new Date());
+                    setMatches(pastMatches);
+                    const names = pastMatches.map((match: any) => match.opponent);
+                    setOpponentNames(names);
+                } else {
+                    console.error('Failed to fetch recent matches');
+                }
+            } catch (error) {
+                console.error('Error fetching recent matches:', error);
             }
-        } catch (error) {
-            console.error('Error fetching recent matches:', error);
-        }
         };
 
         fetchUserData();
@@ -56,11 +68,11 @@ const Profile: React.FC = () => {
         <div className="profile-page-container">
             <div className="hero">
                 <div className="left-side">
-                <h1>Profile View</h1>
+                    <h1>Profile View</h1>
                 </div>
                 <div className="right-side">
-                <p className="player-name">Player: {userName || 'Loading...'}</p>
-                <p className="player-rating">Current Rating: {userRating || '--'}</p>
+                    <p className="player-name">Player: {userName || 'Loading...'}</p>
+                    <p className="player-rating">Current Rating: {userRating || '--'}</p>
                 </div>
             </div>
             

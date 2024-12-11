@@ -23,7 +23,13 @@ const Register: React.FC = () => {
   useEffect(() => {
     const fetchSports = async () => {
       try {
-        const response = await fetch(config.backendUrl + '/api/sports');
+        const response = await fetch(config.backendUrl + '/api/sports', {
+          method: 'GET',
+          headers: {
+            'ngrok-skip-browser-warning': 'true',  // Skip the Ngrok warning page
+            'Content-Type': 'application/json',    // Ensure the response is treated as JSON
+          },
+        });
         if (!response.ok) {
           throw new Error('Failed to fetch sports');
         }
@@ -66,7 +72,8 @@ const Register: React.FC = () => {
       const response = await fetch(config.backendUrl + '/api/users', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'ngrok-skip-browser-warning': 'true',  // Skip the Ngrok warning page
         },
         body: JSON.stringify(dataToSend)
       });

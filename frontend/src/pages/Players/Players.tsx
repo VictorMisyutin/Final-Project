@@ -12,17 +12,23 @@ const Players: React.FC = () => {
   const [firstName, setFirstName] = useState<string>('');
   const [lastName, setLastName] = useState<string>('');
   const [gender, setGender] = useState<string>(''); // '' represents no filter.
-  const [minRating, setMinRating] = useState<number | ''>('');
-  const [maxRating, setMaxRating] = useState<number | ''>('');
-  const [sport, setSport] = useState<string>('');
+  const [minRating, setMinRating] = useState<number | ''>(''); 
+  const [maxRating, setMaxRating] = useState<number | ''>(''); 
+  const [sport, setSport] = useState<string>(''); 
   const [searchResults, setSearchResults] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [sports, setSports] = useState<Sport[]>([])
+  const [sports, setSports] = useState<Sport[]>([]);
 
   useEffect(() => {
     const fetchSports = async () => {
       try {
-        const response = await fetch(`${config.backendUrl}/api/sports`);
+        const response = await fetch(`${config.backendUrl}/api/sports`, {
+          method: 'GET',
+          headers: {
+            'ngrok-skip-browser-warning': 'true',  // Skip the Ngrok warning page
+            'Content-Type': 'application/json',    // Ensure the response is treated as JSON
+          },
+        });
         if (!response.ok) throw new Error('Failed to fetch sports');
         const data = await response.json();
         if (data.message === 'OK') {
@@ -39,9 +45,16 @@ const Players: React.FC = () => {
   }, []);
 
   const getSportNameByID = (sportID: string) => {
-    const sportName = sports.find((s) => s._id === sportID[0]);
-    return sportName ? sportName.sport : '--';
-  }
+    
+    for (let i = 0; i < sports.length; i++) {
+      if (sportID.includes(sports[i]._id)){
+        return sports[i].sport;
+      }
+    }
+      return '--';
+  };
+  
+  
   const filterResultsByRating = (players: any[]) => {
     return players.filter(player => {
       const elo = player.elo || 0;
@@ -50,22 +63,31 @@ const Players: React.FC = () => {
       return isAboveMinRating && isBelowMaxRating;
     });
   };
+
   const handleSearch = async () => {
     setIsLoading(true);
     try {
       const where: Record<string, any> = {};
-      
+
       if (firstName) where['firstName'] = firstName;
       if (lastName) where['lastName'] = lastName;
       if (gender) where['gender'] = gender;
-      if (sport) where ['sport'] = sport;
+      if (sport) where['sport'] = sport;
+
       const params = new URLSearchParams();
       params.append('where', JSON.stringify(where));
-      const response = await fetch(`${config.backendUrl}/api/users?${params.toString()}`);
+
+      const response = await fetch(`${config.backendUrl}/api/users?${params.toString()}`, {
+        method: 'GET',
+        headers: {
+          'ngrok-skip-browser-warning': 'true',  // Skip the Ngrok warning page
+          'Content-Type': 'application/json',    // Ensure the response is treated as JSON
+        },
+      });
       const data = await response.json();
 
       if (data.message === 'OK') {
-        const filteredPlayers = filterResultsByRating(data.data)
+        const filteredPlayers = filterResultsByRating(data.data);
         setSearchResults(filteredPlayers);
       } else {
         console.error('Failed to fetch players');
@@ -120,7 +142,6 @@ const Players: React.FC = () => {
         />
         <select
           className="search-dropdown"
-          
           value={gender}
           onChange={(e) => setGender(e.target.value)}
         >
@@ -136,11 +157,9 @@ const Players: React.FC = () => {
         >
           <option value=''>{'Select Sport'}</option>
           {sports.map((s) => (
-            <option value={s._id}>{s.sport}</option>
+            <option value={s._id} key={s._id}>{s.sport}</option>
           ))}
         </select>
-        
-    
         <button className="search-button" onClick={handleSearch} disabled={isLoading}>
           {isLoading ? 'Searching...' : 'Search'}
         </button>

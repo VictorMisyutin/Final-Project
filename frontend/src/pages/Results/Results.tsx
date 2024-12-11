@@ -38,7 +38,13 @@ const Results: React.FC = () => {
   useEffect(() => {
     const fetchSports = async () => {
       try {
-        const response = await fetch(`${config.backendUrl}/api/sports`);
+        const response = await fetch(`${config.backendUrl}/api/sports`, {
+          method: 'GET',
+          headers: {
+            'ngrok-skip-browser-warning': 'true',  // Skip the Ngrok warning page
+            'Content-Type': 'application/json',    // Ensure the response is treated as JSON
+          },
+        });
         if (!response.ok) throw new Error('Failed to fetch sports');
         const data = await response.json();
         if (data.message === 'OK') {
@@ -56,12 +62,11 @@ const Results: React.FC = () => {
 
   const handleSportChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSport(e.target.value)
-    
   }
 
   const handleSearch = async () => {
     setIsLoading(true);
-    
+
     try {
       const where: Record<string, any> = {};
 
@@ -76,7 +81,13 @@ const Results: React.FC = () => {
       const params = new URLSearchParams();
       params.append('where', JSON.stringify(where));
 
-      const response = await fetch(`${config.backendUrl}/api/tournaments?${params.toString()}`);
+      const response = await fetch(`${config.backendUrl}/api/tournaments?${params.toString()}`, {
+        method: 'GET',
+        headers: {
+          'ngrok-skip-browser-warning': 'true',  // Skip the Ngrok warning page
+          'Content-Type': 'application/json',    // Ensure the response is treated as JSON
+        },
+      });
       const data = await response.json();
 
       if (data.message === 'OK') {
@@ -94,7 +105,6 @@ const Results: React.FC = () => {
   return (
     <div className="results-page-container">
       <div className="hero">
-        
         <div className="left-side">
           <h1 className="title">Tournament Results</h1>
         </div>
@@ -140,7 +150,7 @@ const Results: React.FC = () => {
         >
           <option value="">Select Sport</option>
           {sports.map((s) => (
-            <option value={s._id} key ={s._id}>{s.sport}</option>
+            <option value={s._id} key={s._id}>{s.sport}</option>
           ))}
         </select>
         <input
@@ -162,7 +172,6 @@ const Results: React.FC = () => {
         </button>
       </div>
       <div className="results-section-container">
-        {/* Data Header */}
         <div className="data-header">
           <div className="header-item">Title</div>
           <div className="header-item">City</div>
@@ -173,7 +182,6 @@ const Results: React.FC = () => {
           <div className="header-item">End Date</div>
           <div className="header-item">Actions</div>
         </div>
-        {/* Scrollable Results Section */}
         <div className="results-section">
           {results.length > 0 ? (
             results.map((tournament, index) => (

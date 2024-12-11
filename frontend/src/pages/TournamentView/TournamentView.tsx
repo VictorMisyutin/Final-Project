@@ -15,6 +15,7 @@ interface Tournament {
         sport: string;
     };
 }
+
 const TournamentView: React.FC = () => {
     const { tournamentid } = useParams<{ tournamentid: string }>();
     const [tournament, setTournament] = useState<Tournament>()
@@ -35,7 +36,13 @@ const TournamentView: React.FC = () => {
 
         const fetchTournamentData = async () => {
             try {
-                const response = await fetch(config.backendUrl + `/api/tournaments/`);
+                const response = await fetch(config.backendUrl + `/api/tournaments/`, {
+                    method: 'GET',
+                    headers: {
+                        'ngrok-skip-browser-warning': 'true',  // Skip the Ngrok warning page
+                        'Content-Type': 'application/json',    // Ensure the response is treated as JSON
+                    },
+                });
                 const data = await response.json();
                 
                 if (data.message === 'OK') {
@@ -60,23 +67,26 @@ const TournamentView: React.FC = () => {
                 console.error('Error fetching tournament data:', error);
             }
         };
-        
 
         const fetchMatches = async () => {
-        try {
-            
-            const response = await fetch(config.backendUrl + `/api/tournaments/${tournamentid}/matches`);
-            const data = await response.json();
+            try {
+                const response = await fetch(config.backendUrl + `/api/tournaments/${tournamentid}/matches`, {
+                    method: 'GET',
+                    headers: {
+                        'ngrok-skip-browser-warning': 'true',  // Skip the Ngrok warning page
+                        'Content-Type': 'application/json',    // Ensure the response is treated as JSON
+                    },
+                });
+                const data = await response.json();
 
-            if (data.message === 'OK') {
-                setMatches(data.data);
-                // console.log(matches)
-            } else {
-            console.error('Failed to fetch recent matches');
+                if (data.message === 'OK') {
+                    setMatches(data.data);
+                } else {
+                    console.error('Failed to fetch recent matches');
+                }
+            } catch (error) {
+                console.error('Error fetching recent matches:', error);
             }
-        } catch (error) {
-            console.error('Error fetching recent matches:', error);
-        }
         };
 
         fetchTournamentData();
@@ -87,43 +97,42 @@ const TournamentView: React.FC = () => {
         <div className="tournament-view-page-container">
             <div className="hero">
                 <div className="left-side">
-                <h1>{tournamentTitle}</h1>
+                    <h1>{tournamentTitle}</h1>
                 </div>
                 <div className="right-side">
-                <p className="description-row">Sport: {tournamentSport || '--'}</p>
-                <p className="description-row">City: {tournamentCity || '--'}</p>
-                <p className="description-row">State: {tournamentState || '--'}</p>
-                <p className="description-row">Country: {tournamentCountry || '--'}</p>
-                <p className="description-row">Dates: { new Date(tournamentStartDate ?? '--').toLocaleDateString()} - {new Date(tournamentEndDate ?? '--').toLocaleDateString()}</p>
-
+                    <p className="description-row">Sport: {tournamentSport || '--'}</p>
+                    <p className="description-row">City: {tournamentCity || '--'}</p>
+                    <p className="description-row">State: {tournamentState || '--'}</p>
+                    <p className="description-row">Country: {tournamentCountry || '--'}</p>
+                    <p className="description-row">Dates: { new Date(tournamentStartDate ?? '--').toLocaleDateString()} - {new Date(tournamentEndDate ?? '--').toLocaleDateString()}</p>
                 </div>
             </div>
             
             <div className="recent-matches-section">
                 <div className="data-header">
-                <div className="match-rating">Winner First Name</div>
-                <div className="match-rating">Winner Last Name</div>
-                <div className="match-rating">Current Rating</div>
-                <div className="match-rating">Points Won</div>
-                <div className="match-rating">Opponent First Name</div>
-                <div className="match-rating">Opponent Last Name</div>
-                <div className="match-rating">Current Rating</div>
-                <div className="match-rating">Points Lost</div>
-                <div className="match-date">Date</div>
+                    <div className="match-rating">Winner First Name</div>
+                    <div className="match-rating">Winner Last Name</div>
+                    <div className="match-rating">Current Rating</div>
+                    <div className="match-rating">Points Won</div>
+                    <div className="match-rating">Opponent First Name</div>
+                    <div className="match-rating">Opponent Last Name</div>
+                    <div className="match-rating">Current Rating</div>
+                    <div className="match-rating">Points Lost</div>
+                    <div className="match-date">Date</div>
                 </div>
                 
                 {matches.map((match) => (
-                <div className="tournament">
-                    <div className="match-rating">{match.winner.firstName ?? '--'}</div>
-                    <div className="match-result">{match.winner.lastName ?? '--'}</div>
-                    <div className="match-rating">{match.winner.elo ?? '--'}</div>
-                    <div className="match-result">{match.RatingChangeForWinner ?? '--'}</div>
-                    <div className="match-rating">{match.loser.firstName ?? '--'}</div>
-                    <div className="match-result">{match.loser.lastName ?? '--'}</div>
-                    <div className="match-rating">{match.winner.elo ?? '--'}</div>
-                    <div className="match-result">{match.RatingChangeForLoser ?? '--'}</div>
-                    <div className="match-date">{new Date(match.startDate ?? '--').toLocaleDateString()}</div>
-                </div>
+                    <div className="tournament" key={match._id}>
+                        <div className="match-rating">{match.winner.firstName ?? '--'}</div>
+                        <div className="match-result">{match.winner.lastName ?? '--'}</div>
+                        <div className="match-rating">{match.winner.elo ?? '--'}</div>
+                        <div className="match-result">{match.RatingChangeForWinner ?? '--'}</div>
+                        <div className="match-rating">{match.loser.firstName ?? '--'}</div>
+                        <div className="match-result">{match.loser.lastName ?? '--'}</div>
+                        <div className="match-rating">{match.loser.elo ?? '--'}</div>
+                        <div className="match-result">{match.RatingChangeForLoser ?? '--'}</div>
+                        <div className="match-date">{new Date(match.startDate ?? '--').toLocaleDateString()}</div>
+                    </div>
                 ))}
             </div>
         </div>

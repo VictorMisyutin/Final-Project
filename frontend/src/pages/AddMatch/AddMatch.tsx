@@ -33,7 +33,13 @@ const AddMatch: React.FC = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await fetch(config.backendUrl + '/api/users');
+        const response = await fetch(config.backendUrl + '/api/users', {
+          method: 'GET',
+          headers: {
+            'ngrok-skip-browser-warning': 'true',  // Skip the Ngrok warning page
+            'Content-Type': 'application/json',    // Ensure the response is treated as JSON
+          },
+        });
         const data = await response.json();
         setPlayers(data.data);
       } catch (error) {
@@ -43,7 +49,13 @@ const AddMatch: React.FC = () => {
 
     const fetchTournaments = async () => {
       try {
-        const response = await fetch(config.backendUrl + '/api/tournaments');
+        const response = await fetch(config.backendUrl + '/api/tournaments', {
+          method: 'GET',
+          headers: {
+            'ngrok-skip-browser-warning': 'true',  // Skip the Ngrok warning page
+            'Content-Type': 'application/json',    // Ensure the response is treated as JSON
+          },
+        });
         const data = await response.json();
         setTournaments(data.data);
       } catch (error) {
@@ -70,7 +82,8 @@ const AddMatch: React.FC = () => {
       const response = await fetch(`${config.backendUrl}/api/tournaments/${tournamentId}/verify-password`, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
+          'ngrok-skip-browser-warning': 'true',  // Skip the Ngrok warning page
+          'Content-Type': 'application/json',    // Ensure the response is treated as JSON
         },
         body: JSON.stringify({ password: tournamentPassword }),
       });
@@ -123,6 +136,7 @@ const AddMatch: React.FC = () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'ngrok-skip-browser-warning': 'true',  // Skip the Ngrok warning page
         },
         body: JSON.stringify({
           winnerId,

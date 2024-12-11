@@ -24,10 +24,20 @@ const Home: React.FC = () => {
   useEffect(() => {
     const fetchTournaments = async () => {
       try {
-        const response = await fetch(config.backendUrl + `/api/tournaments?limit=${limit}`);
+        const response = await fetch(config.backendUrl + `/api/tournaments?limit=${limit}`, {
+          method: 'GET', // or POST depending on your request type
+          headers: {
+            'ngrok-skip-browser-warning': 'true',  // Skip the Ngrok warning page
+            'Content-Type': 'application/json',    // Ensure the response is treated as JSON
+            // Optionally, you can add a custom User-Agent header if needed
+            // 'User-Agent': 'MyCustomUserAgent',  // Uncomment if you want to use a custom User-Agent
+          },
+        });
+        
         if (!response.ok) {
           throw new Error('Failed to fetch tournaments');
         }
+
         const data = await response.json();
         setTournaments(data.data);
       } catch (err: any) {

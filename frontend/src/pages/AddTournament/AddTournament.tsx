@@ -23,7 +23,13 @@ const AddTournament: React.FC = () => {
   useEffect(() => {
     const fetchSports = async () => {
       try {
-        const response = await fetch(config.backendUrl + '/api/sports');
+        const response = await fetch(config.backendUrl + '/api/sports', {
+          method: 'GET',
+          headers: {
+            'ngrok-skip-browser-warning': 'true',  // Skip the Ngrok warning page
+            'Content-Type': 'application/json',    // Ensure the response is treated as JSON
+          },
+        });
         const data = await response.json();
         setSports(data.data);
       } catch (error) {
@@ -46,6 +52,7 @@ const AddTournament: React.FC = () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'ngrok-skip-browser-warning': 'true',  // Skip the Ngrok warning page
         },
         body: JSON.stringify({
           title: Title,

@@ -14,7 +14,13 @@ const Dashboard: React.FC = () => {
       if (!userId) return;
 
       try {
-        const response = await fetch(`${config.backendUrl}/api/users/${userId}`);
+        const response = await fetch(`${config.backendUrl}/api/users/${userId}`, {
+          method: 'GET',
+          headers: {
+            'ngrok-skip-browser-warning': 'true',  // Skip the Ngrok warning page
+            'Content-Type': 'application/json',    // Ensure the response is treated as JSON
+          },
+        });
         const data = await response.json();
         if (data.message === 'OK') {
           setUserName(`${data.data.firstName} ${data.data.lastName}`);
@@ -31,7 +37,13 @@ const Dashboard: React.FC = () => {
       if (!userId) return;
 
       try {
-        const response = await fetch(`${config.backendUrl}/api/matches/recent/${userId}`);
+        const response = await fetch(`${config.backendUrl}/api/matches/recent/${userId}`, {
+          method: 'GET',
+          headers: {
+            'ngrok-skip-browser-warning': 'true',  // Skip the Ngrok warning page
+            'Content-Type': 'application/json',    // Ensure the response is treated as JSON
+          },
+        });
         const data = await response.json();
 
         if (data.message === 'OK') {
