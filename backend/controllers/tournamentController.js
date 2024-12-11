@@ -1,6 +1,8 @@
 const Tournament = require('../models/tournament');
 const User = require('../models/user');
 const Sport = require('../models/sport');
+const bcrypt = require('bcryptjs');
+
 
 // Get all tournaments
 exports.getTournaments = (req, res) => {
@@ -30,11 +32,9 @@ exports.getTournaments = (req, res) => {
 
 // Create a new tournament
 exports.createTournament = async (req, res) => {
-    console.log("Request body:", req.body);
-    if (!req.body.title || !req.body.City || !req.body.Country || !req.body.State || !req.body.password) {
+    if (!req.body.title || !req.body.City || !req.body.Country || !req.body.Sport || !req.body.password) {
         return res.status(400).json({ message: 'Title, City, Country, Sport, and Password are required fields' });
     }
-    console.log("here");
 
     try {
         const sport = await Sport.findById(req.body.Sport);
