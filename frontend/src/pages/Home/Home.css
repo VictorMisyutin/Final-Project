@@ -6,10 +6,11 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  padding: 50px 20px;
   box-sizing: border-box;
 }
-
+.home .hero{
+  padding: 50px 20px;
+}
 .left-side, .right-side {
   flex: 1 1 50%;
   max-width: 50%;
@@ -90,6 +91,7 @@
   .hero {
     flex-direction: column;
     text-align: center;
+    padding: 30px 10px; 
   }
 
   .left-side, .right-side {

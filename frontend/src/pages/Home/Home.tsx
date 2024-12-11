@@ -45,7 +45,7 @@ const Home: React.FC = () => {
   }
 
   return (
-    <>
+    <div className='home'>
       <div className="hero">
         <div className="left-side">
           <h1 className="title">Tourney Tally</h1>
@@ -88,7 +88,7 @@ const Home: React.FC = () => {
           </div>
         ))}
       </div>
-    </>
+    </div>
   );
 };
 
