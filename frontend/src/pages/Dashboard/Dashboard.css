@@ -2,6 +2,7 @@
 .dashboard-page-container {
   width: 100%;
   box-sizing: border-box;
+  
 }
 
 .hero {
@@ -50,15 +51,10 @@
   overflow: hidden;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
   box-sizing: border-box;
-}
-
-.data-header {
-  display: flex;
-  align-items: center;
-  padding: 15px;
-  background-color: #eeeeee;
-  font-weight: bold;
-  border-radius: 12px 12px 0 0;
+  .data-header {
+    padding: 20px 120px;
+    padding-right: 140px;
+  } 
 }
 
 .recent-matches-section {
