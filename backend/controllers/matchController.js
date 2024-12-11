@@ -4,11 +4,11 @@ const Tournament = require('../models/tournament');
 const Sport = require('../models/sport');
 
 const calculateEloChange = (playerRating, opponentRating, isWinner, K = 32) => {
-    let expectedValue = 1 / (1 + 10 ** ((opponentRating - playerRating) / 400));
+    let e1 = 1 / (1 + 10 ** ((opponentRating - playerRating) / 400));
+    let e2 = 1 / (1 + 10 ** ((playerRating - opponentRating) / 400));
     
-    
-    let updatep1 = K * (1 - expectedValue);
-    let updatep2 = K * (0 - expectedValue);
+    let updatep1 = K * (1 - e1);
+    let updatep2 = K * (0 - e2);
     return isWinner ? Math.round(updatep1) : Math.round(updatep2);
 };
 
@@ -86,57 +86,61 @@ exports.getMatchesByTournament = (req, res) => {
 };
 
 // Get recent matches for a specific user
-exports.getRecentMatchesByUser = (req, res) => {
+exports.getRecentMatchesByUser = async (req, res) => {
     const userId = req.params.userId;
 
-    if (!userId) {
-        return res.status(400).json({ message: 'User ID is required' });
-    }
+    try {
+        // Fetch matches where the user is either the winner or loser
+        const matches = await Match.find({
+            $or: [
+                { winner: userId },
+                { loser: userId }
+            ]
+        })
+            .populate('winner', 'firstName lastName elo')
+            .populate('loser', 'firstName lastName elo')
+            .populate({ path: 'TournamentId', select: 'title Sport' })
+            .populate({ path: 'TournamentId.Sport', select: 'name' }) // Populate sport name
+            .sort({ startDate: -1 }); // Sort by start date (most recent first)
 
-    Match.find({ $or: [{ winner: userId }, { loser: userId }] })
-        .sort({ startDate: -1 })
-        .limit(10)
-        .populate('winner loser', 'firstName lastName elo')  
-        .populate('TournamentId', 'title Sport')
-        .then(matches => {
-            if (matches.length === 0) {
-                return res.json({ message: 'No recent matches found', data: [] });
+        // Format the data
+        const formattedMatches = matches.map(match => {
+            if (!match.TournamentId) {
+                console.warn(`Match with ID ${match._id} has no TournamentId.`);
+                return null;
+            }
+            if (!match.TournamentId.Sport) {
+                console.warn(`Match with ID ${match._id} has no Sport associated with TournamentId.`);
+                return null;
             }
 
-            const recentMatches = matches.map((match) => {
-                if (!match.winner || !match.loser) {
-                    console.error('Missing player data in match:', match);
-                    return null;
-                }
+            const isWinner = match.winner._id.toString() === userId;
+            const opponent = isWinner ? match.loser : match.winner;
+            const ratingChange = isWinner ? match.RatingChangeForWinner : match.RatingChangeForLoser;
 
-                // Check if the user is the winner or loser
-                const isWinner = match.winner._id.toString() === userId;
-                const opponent = isWinner ? match.loser : match.winner;
+            return {
+                opponent: `${opponent.firstName} ${opponent.lastName}`,
+                opponent_rating: opponent.elo,
+                result: isWinner ? 'Win' : 'Loss',
+                rating_change: ratingChange,
+                tournament: match.TournamentId.title,
+                sport: match.TournamentId.Sport.name,
+                start_date: match.startDate
+            };
+        }).filter(match => match !== null);
 
-                const opponentName = opponent ? `${opponent.firstName} ${opponent.lastName}` : 'Unknown';
-                const calculatedResult = isWinner ? "Win" : "Lose";
-                const ratingChange = isWinner ? match.RatingChangeForWinner : match.RatingChangeForLoser;
-
-                return {
-                    opponent: opponentName, 
-                    opponent_rating: opponent.elo,
-                    result: calculatedResult,
-                    rating_change: ratingChange,  // Display the correct rating change based on winner/loser
-                    tournament: match.TournamentId.title,
-                    sport: match.TournamentId.Sport.sport, 
-                    start_date: match.startDate
-                };
-            }).filter(Boolean); // Remove any null values
-
-            res.json({ message: 'OK', data: recentMatches });
-        })
-        .catch(err => {
-            console.error('Error fetching matches:', err);
-            res.status(500).json({ message: 'Error fetching matches', data: err });
+        res.json({
+            message: 'OK',
+            data: formattedMatches
         });
+    } catch (error) {
+        console.error('Error fetching recent matches:', error);
+        res.status(500).json({
+            message: 'Error fetching recent matches',
+            error: error.message
+        });
+    }
 };
-
-
 
 
 // Get a match by ID

@@ -32,12 +32,11 @@ const Profile: React.FC = () => {
 
         const fetchRecentMatches = async () => {
         try {
-            const response = await fetch(config.backendUrl + `/api/matches/${userid}`);
+            const response = await fetch(config.backendUrl + `/api/matches/recent/${userid}`);
             const data = await response.json();
 
             if (data.message === 'OK') {
             const pastMatches = data.data.filter((match: any) => new Date(match.start_date) < new Date());
-
             setMatches(pastMatches);
             const names = pastMatches.map((match: any) => match.opponent);
             setOpponentNames(names);
