@@ -25,6 +25,7 @@ const AddMatch: React.FC = () => {
   const [winnerBirthYear, setWinnerBirthYear] = useState<string>('');
   const [loserBirthYear, setLoserBirthYear] = useState<string>('');
   const [tournamentId, setTournamentId] = useState<string>('');
+  const [tournamentPassword, setTournamentPassword] = useState<string>('');
   const [startDate, setStartDate] = useState<string>('');
   const [message, setMessage] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
@@ -64,8 +65,31 @@ const AddMatch: React.FC = () => {
     return player ? player.elo : null;
   };
 
+  const verifyTournamentPassword = async () => {
+    try {
+      const response = await fetch(`${config.backendUrl}/api/tournaments/${tournamentId}/verify-password`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ password: tournamentPassword }),
+      });
+
+      const data = await response.json();
+      if (data.message !== 'Password verified successfully') {
+        setMessage('Invalid tournament password');
+        return false;
+      }
+      return true;
+    } catch (error) {
+      setMessage('Error verifying tournament password');
+      console.error('Error verifying tournament password:', error);
+      return false;
+    }
+  };
+
   const handleAddMatch = async () => {
-    if (!winnerId || !loserId || !winnerBirthYear || !loserBirthYear || !tournamentId || !startDate) {
+    if (!winnerId || !loserId || !winnerBirthYear || !loserBirthYear || !tournamentId || !tournamentPassword || !startDate) {
       setMessage('Please fill in all fields');
       return;
     }
@@ -84,6 +108,12 @@ const AddMatch: React.FC = () => {
 
     if (winnerId === loserId) {
       setMessage('Winner and Loser cannot be the same');
+      return;
+    }
+
+    const isPasswordValid = await verifyTournamentPassword();
+    if (!isPasswordValid) {
+      setMessage("wrong password");
       return;
     }
 
@@ -109,13 +139,15 @@ const AddMatch: React.FC = () => {
         setWinnerId('');
         setLoserId('');
         setTournamentId('');
+        setTournamentPassword('');
         setStartDate('');
+        setLoserBirthYear('');
+        setWinnerBirthYear('');
       } else {
         setMessage('Error creating match');
       }
     } catch (error) {
       setMessage('Error creating match');
-      console.error('Error adding match:', error);
     } finally {
       setLoading(false);
     }
@@ -187,6 +219,17 @@ const AddMatch: React.FC = () => {
               </option>
             ))}
           </select>
+        </div>
+
+        <div className="form-group">
+          <label>Tournament Password</label>
+          <input
+            type="password"
+            value={tournamentPassword}
+            onChange={(e) => setTournamentPassword(e.target.value)}
+            placeholder="Tournament Password"
+            required
+          />
         </div>
 
         <div className="form-group">
